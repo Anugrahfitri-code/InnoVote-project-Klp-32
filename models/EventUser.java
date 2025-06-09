@@ -11,7 +11,7 @@ public abstract class EventUser {
     public String getWelcomeMessage() {
         return "Welcome, " + username + "!";
     }
-
+    
     public String getUsername() {
         return username;
     }
