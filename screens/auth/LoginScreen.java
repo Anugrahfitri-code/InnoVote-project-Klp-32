@@ -2,6 +2,9 @@ package screens.auth;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+
+import java.lang.classfile.Label;
+
 import javafx.geometry.*;
 import services.AuthService;
 import utils.SceneManager;
@@ -9,6 +12,10 @@ import models.User;
 
 public class LoginScreen extends VBox {
     public LoginScreen() {
+
+        this.setPrefWidth(500);  
+        this.setPrefHeight(400); 
+
         Label titleLabel = new Label("InnoVote 2025");
         titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
         
