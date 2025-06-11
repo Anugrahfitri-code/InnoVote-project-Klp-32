@@ -9,14 +9,14 @@ public class Vote {
     private final String id;
     private final Idea idea;
     private final Judge voter; 
-    private final IntegerProperty score;
+    private final DoubleProperty score;
     private final StringProperty comment;
 
     public Vote(String id, Idea idea, Judge voter, int score, String comment) {
         this.id = id;
         this.idea = idea;
         this.voter = voter;
-        this.score = new SimpleIntegerProperty(score);
+        this.score = new SimpleDoubleProperty(score);
         this.comment = new SimpleStringProperty(comment);
     }
 
