@@ -54,9 +54,7 @@ public class JudgeDashboard extends BorderPane {
         welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
 
         Button logoutBtn = new Button("Logout");
-        logoutBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " + Theme.TEXT_SECONDARY + "; -fx-border-color: " + Theme.BORDER_COLOR + "; -fx-border-width: 1px; -fx-border-radius: 4; -fx-font-weight: bold; -fx-padding: 6 12;");
-        logoutBtn.setOnMouseEntered(e -> logoutBtn.setStyle("-fx-background-color: " + Theme.ACCENT_NEGATIVE + "; -fx-text-fill: " + Theme.TEXT_PRIMARY + "; -fx-border-color: " + Theme.BORDER_COLOR + "; -fx-border-width: 1px; -fx-border-radius: 4; -fx-font-weight: bold; -fx-padding: 6 12;"));
-        logoutBtn.setOnMouseExited(e -> logoutBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " + Theme.TEXT_SECONDARY + "; -fx-border-color: " + Theme.BORDER_COLOR + "; -fx-border-width: 1px; -fx-border-radius: 4; -fx-font-weight: bold; -fx-padding: 6 12;"));
+        applyButtonStyles(logoutBtn, Theme.ACCENT_PRIMARY, Theme.ACCENT_PRIMARY_HOVER); 
         logoutBtn.setOnAction(e -> {
             Session.logout();
             SceneManager.switchToAuth();
