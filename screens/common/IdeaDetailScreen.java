@@ -1,4 +1,4 @@
-package innovote.screens.common;
+package com.innovote.screens.common;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -9,6 +9,7 @@ import com.innovote.models.Vote;
 import com.innovote.models.User;
 import com.innovote.utils.DummyDatabase;
 import com.innovote.utils.SceneManager;
+import com.innovote.utils.Theme;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,13 +23,16 @@ public class IdeaDetailScreen extends VBox {
         this.currentUser = user;
         this.idea = idea;
 
+        this.setStyle("-fx-background-color: " + Theme.BACKGROUND_PRIMARY + ";");
+
         Label screenTitle = new Label("Idea Details");
-        screenTitle.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        screenTitle.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
 
         // Tabel untuk menampilkan detail votes
         TableView<Vote> voteTable = new TableView<>();
         voteTable.setPlaceholder(new Label("No votes yet."));
         voteTable.setPrefHeight(200);
+        voteTable.setStyle("-fx-background-color: " + Theme.BACKGROUND_SECONDARY + ";");
 
         TableColumn<Vote, String> voterCol = new TableColumn<>("Voter");
         voterCol.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getVoter().getUsername()));
@@ -52,16 +56,25 @@ public class IdeaDetailScreen extends VBox {
 
         Button backButton = new Button("Back to Dashboard");
         backButton.setOnAction(e -> SceneManager.switchToUserDashboard(currentUser));
+        backButton.setStyle("-fx-background-color: " + Theme.ACCENT_PRIMARY + "; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 5;");
+
+        VBox ideaInfo = new VBox(5,
+            createInfoRow("Title:", idea.getTitle()),
+            createInfoRow("Description:", idea.getDescription()),
+            createInfoRow("Category:", idea.getCategory()),
+            createInfoRow("Author:", idea.getParticipant().getUsername()),
+            createInfoRow("Average Score:", String.format("%.1f", idea.getAverageScore()))
+        );
+        ideaInfo.setStyle("-fx-background-color: " + Theme.BACKGROUND_SECONDARY + "; -fx-padding: 15; -fx-background-radius: 10;");
+
+        Label votesLabel = new Label("All Votes:");
+        votesLabel.setStyle("-fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
 
         this.getChildren().addAll(
             screenTitle,
-            new HBox(10, new Label("Title:"), new Label(idea.getTitle())),
-            new HBox(10, new Label("Description:"), createWrappedLabel(idea.getDescription())),
-            new HBox(10, new Label("Category:"), new Label(idea.getCategory())),
-            new HBox(10, new Label("Author:"), new Label(idea.getParticipant().getUsername())),
-            new HBox(10, new Label("Average Score:"), new Label(String.format("%.1f", idea.getAverageScore()))),
+            ideaInfo,
             new Separator(),
-            new Label("All Votes:"),
+            votesLabel,
             voteTable,
             backButton
         );
@@ -69,10 +82,19 @@ public class IdeaDetailScreen extends VBox {
         this.setPadding(new Insets(20));
     }
 
+    private HBox createInfoRow(String labelText, String valueText) {
+        Label label = new Label(labelText);
+        label.setStyle("-fx-font-weight: bold; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
+        Label value = createWrappedLabel(valueText);
+        value.setStyle("-fx-text-fill: white;");
+        HBox row = new HBox(10, label, value);
+        return row;
+    }
+
     private Label createWrappedLabel(String text) {
         Label label = new Label(text);
         label.setWrapText(true);
-        label.setMaxWidth(400); 
+        label.setMaxWidth(400);
         return label;
     }
 }
