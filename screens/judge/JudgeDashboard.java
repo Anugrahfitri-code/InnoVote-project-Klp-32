@@ -12,17 +12,18 @@ import com.innovote.services.IdeaService;
 import com.innovote.session.Session;
 import com.innovote.utils.AlertHelper;
 import com.innovote.utils.SceneManager;
-import com.innovote.utils.Theme; 
+import com.innovote.utils.Theme;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos; 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell; 
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -79,7 +80,6 @@ public class JudgeDashboard extends BorderPane {
         VBox headerVBox = new VBox(15);
         headerVBox.getChildren().addAll(topHBox, sectionTitleLabel, createFilterBarNode());
         headerVBox.setPadding(new Insets(20, 25, 20, 25));
-        
         headerVBox.setStyle("-fx-background-color: " + Theme.BACKGROUND_PRIMARY + ";");
 
         setupTable();
@@ -104,6 +104,7 @@ public class JudgeDashboard extends BorderPane {
         applyInputStyles(categoryFilter);
         categoryFilter.setOnAction(e -> applyFiltersAndSort());
         
+        styleComboBox(categoryFilter);
 
         sortOrder = new ComboBox<>();
         sortOrder.setPromptText("Sort By");
@@ -111,16 +112,33 @@ public class JudgeDashboard extends BorderPane {
         sortOrder.getSelectionModel().select("Highest Score");
         applyInputStyles(sortOrder);
         sortOrder.setOnAction(e -> applyFiltersAndSort());
+        
+        styleComboBox(sortOrder);
     }
     
+    private void styleComboBox(ComboBox<String> comboBox) {
+        String targetTextStyle = "-fx-text-fill: " + Theme.TEXT_SECONDARY + "; -fx-font-family: 'Segoe UI Semibold';";
+        
+        comboBox.setButtonCell(new ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty); 
+                if (empty || item == null) {
+                    setText(comboBox.getPromptText());
+                } else {
+                    setText(item);
+                    setStyle(targetTextStyle);
+                }
+            }
+        });
+    }
+
     private Node createFilterBarNode() {
         HBox filterSortBar = new HBox(10);
         filterSortBar.setAlignment(Pos.CENTER_LEFT);
-
         Label searchLabel = createFilterLabel("Search:");
         Label categoryLabel = createFilterLabel("Category:");
         Label sortLabel = createFilterLabel("Sort:");
-
         filterSortBar.getChildren().addAll(searchLabel, searchField, categoryLabel, categoryFilter, sortLabel, sortOrder);
         return filterSortBar;
     }
@@ -136,10 +154,7 @@ public class JudgeDashboard extends BorderPane {
         ideaTable.setPlaceholder(new Label("No ideas available for review."));
         ideaTable.setStyle("-fx-background-color: " + Theme.BACKGROUND_SECONDARY + "; -fx-border-color: " + Theme.BORDER_COLOR + "; -fx-border-width: 0.5px;");
 
-        ideaTable.setRowFactory(tv -> {
-            TableRow<Idea> row = new TableRow<>();
-            return row;
-        });
+        ideaTable.setRowFactory(tv -> new TableRow<>());
 
         TableColumn<Idea, String> titleCol = createStyledTableColumn("Title", 200);
         titleCol.setCellValueFactory(cell -> cell.getValue().titleProperty());
@@ -184,13 +199,8 @@ public class JudgeDashboard extends BorderPane {
             @Override
             protected void updateItem(T item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    setText(item.toString());
-                    setStyle("-fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
-                }
+                setText(empty ? null : item.toString());
+                setStyle("-fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
             }
         });
         return column;
@@ -203,12 +213,11 @@ public class JudgeDashboard extends BorderPane {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
-                    setStyle("");
                 } else {
                     setText(String.format("%.2f", item.doubleValue()));
-                    setAlignment(Pos.CENTER);
-                    setStyle("-fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
                 }
+                setAlignment(Pos.CENTER);
+                setStyle("-fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
             }
         };
     }
@@ -221,11 +230,9 @@ public class JudgeDashboard extends BorderPane {
             {
                 voteBtn.setMinWidth(Region.USE_PREF_SIZE);
                 detailBtn.setMinWidth(Region.USE_PREF_SIZE);
-                
                 applyButtonStyles(voteBtn, Theme.ACCENT_PRIMARY, Theme.ACCENT_PRIMARY_HOVER);
                 applyButtonStyles(detailBtn, Theme.ACCENT_NEUTRAL, Theme.ACCENT_NEUTRAL_HOVER);
                 pane.setAlignment(Pos.CENTER);
-                
                 voteBtn.setOnAction(event -> handleActionEvent(idea -> SceneManager.switchToScreen(new VotingScreen(currentJudge, idea))));
                 detailBtn.setOnAction(event -> handleActionEvent(idea -> SceneManager.switchToScreen(new IdeaDetailScreen(currentJudge, idea))));
             }
