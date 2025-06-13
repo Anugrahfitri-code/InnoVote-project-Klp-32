@@ -3,14 +3,14 @@ package screens.auth;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.*;
-import com.innovote.services.AuthService;
-import com.innovote.models.User;
-import com.innovote.utils.SceneManager;
-import com.innovote.utils.Theme;
-import com.innovote.utils.AlertHelper;
+import services.AuthService;
+import models.User;
+import utils.SceneManager;
+import utils.Theme;
+import utils.AlertHelper;
 import javafx.scene.control.Alert.AlertType;
-import com.innovote.session.Session;
-import com.innovote.exceptions.AuthException;
+import session.Session;
+import exceptions.AuthException;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 
@@ -336,8 +336,7 @@ public class LoginScreen extends VBox {
             }
         });
 
-        registerBtn.setO
-        nAction(e -> SceneManager.switchToRegister());
+        registerBtn.setOnAction(e -> SceneManager.switchToRegister());
 
         // Enable Enter key for login
         usernameField.setOnAction(e -> passwordField.requestFocus());

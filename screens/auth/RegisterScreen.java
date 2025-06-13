@@ -3,13 +3,13 @@ package screens.auth;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.*;
-import com.innovote.services.AuthService;
-import com.innovote.models.User;
-import com.innovote.utils.SceneManager;
-import com.innovote.utils.Theme;
-import com.innovote.utils.AlertHelper;
+import services.AuthService;
+import models.User;
+import utils.SceneManager;
+import utils.Theme;
+import utils.AlertHelper;
 import javafx.scene.control.Alert.AlertType;
-import com.innovote.exceptions.AuthException;
+import exceptions.AuthException;
 
 public class RegisterScreen extends VBox {
     public RegisterScreen() {
