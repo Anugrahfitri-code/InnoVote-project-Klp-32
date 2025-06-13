@@ -139,8 +139,8 @@ public class ParticipantDashboard extends BorderPane {
             {
                 pane.setAlignment(Pos.CENTER);
                 applySmallPrimaryButtonStyle(editBtn, Theme.ACCENT_PRIMARY); 
-                applySmallSecondaryButtonStyle(deleteBtn, Theme.DANGER_COLOR); 
-                applySmallPrimaryButtonStyle(detailBtn, Theme.INFO_COLOR); 
+                applySmallSecondaryButtonStyle(deleteBtn, Theme.ACCENT_PRIMARY); 
+                applySmallPrimaryButtonStyle(detailBtn, Theme.ACCENT_PRIMARY); 
 
                 editBtn.setPrefWidth(60); 
                 deleteBtn.setPrefWidth(60);
