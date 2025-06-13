@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Idea {
-    private StringProperty id; // ID unik untuk ide
+    private StringProperty id; 
     private StringProperty title;
-    private StringProperty description; // Diubah menjadi StringProperty
-    private StringProperty category; // Properti baru
-    private Participant participant; // Mengganti 'author'
+    private StringProperty description;
+    private StringProperty category; 
+    private Participant participant; 
     private LocalDateTime submissionDate;
     private DoubleProperty averageScore;
-    private List<Vote> votes; // Untuk menyimpan daftar vote yang diterima ide ini
+    private List<Vote> votes; 
 
     // Constructor
     public Idea(String id, String title, String description, String category, Participant participant) {
@@ -27,11 +27,9 @@ public class Idea {
         this.category = new SimpleStringProperty(category);
         this.participant = participant;
         this.submissionDate = LocalDateTime.now();
-        this.averageScore = new SimpleDoubleProperty(0.0); // Awalnya 0
-        this.votes = new ArrayList<>(); // Inisialisasi daftar votes
+        this.averageScore = new SimpleDoubleProperty(0.0); 
+        this.votes = new ArrayList<>();
     }
-
-    // --- Getters and Setters for Properties ---
 
     // ID
     public String getId() { return id.get(); }
@@ -45,16 +43,16 @@ public class Idea {
 
     // Description
     public String getDescription() { return description.get(); }
-    public StringProperty descriptionProperty() { return description; } // <-- PROPERTI YANG HILANG SEBELUMNYA
+    public StringProperty descriptionProperty() { return description; }
     public void setDescription(String description) { this.description.set(description); }
 
     // Category
     public String getCategory() { return category.get(); }
-    public StringProperty categoryProperty() { return category; } // <-- PROPERTI YANG HILANG SEBELUMNYA
+    public StringProperty categoryProperty() { return category; }
     public void setCategory(String category) { this.category.set(category); }
 
     // Participant (Pengganti Author)
-    public Participant getParticipant() { return participant; } // <-- getAuthor() diubah menjadi getParticipant()
+    public Participant getParticipant() { return participant; }
     public void setParticipant(Participant participant) { this.participant = participant; }
 
     // Submission Date
@@ -68,13 +66,11 @@ public class Idea {
     // Votes List
     public List<Vote> getVotes() { return votes; }
 
-    // Metode untuk menambah vote dan memperbarui rata-rata skor
     public void addVote(Vote vote) {
         this.votes.add(vote);
-        updateAverageScore(); // Perbarui skor rata-rata setiap kali ada vote baru
+        updateAverageScore();
     }
-
-    // Metode untuk menghitung dan memperbarui rata-rata skor dari daftar votes
+    
     public void updateAverageScore() {
         if (votes.isEmpty()) {
             averageScore.set(0.0);

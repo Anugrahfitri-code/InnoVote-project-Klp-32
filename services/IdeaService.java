@@ -9,13 +9,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class IdeaService {
-
-    // Metode untuk submit ide baru
-    // Urutan parameter: Participant, Title, Description, Category
     public static Idea submitIdea(Participant participant, String title, String description, String category) throws IdeaException {
         validateIdea(title, description, category); // Validasi input
 
-        // Cek duplikasi ide berdasarkan judul dari partisipan yang sama
         boolean isDuplicate = DummyDatabase.getAllIdeas().stream()
                 .filter(idea -> idea.getParticipant().equals(participant))
                 .anyMatch(idea -> idea.getTitle().equalsIgnoreCase(title));
@@ -24,22 +20,16 @@ public class IdeaService {
             throw new IdeaException("You have already submitted an idea with this title.");
         }
 
-        String id = UUID.randomUUID().toString(); // Generate ID unik
+        String id = UUID.randomUUID().toString(); 
         Idea newIdea = new Idea(id, title, description, category, participant);
         DummyDatabase.addIdea(newIdea);
-        // participant.submitIdea(newIdea); // Ini mungkin tidak perlu jika DummyDatabase sudah mengelola
         return newIdea;
     }
 
     // Metode untuk mengambil semua ide
     public static List<Idea> getAllIdeas() throws IdeaException {
-        // Tambahkan try-catch di sini jika ada potensi Exception dari DummyDatabase
         try {
             List<Idea> ideas = DummyDatabase.getAllIdeas();
-            // Opsional: lempar exception jika tidak ada ide, atau kembalikan daftar kosong
-            // if (ideas.isEmpty()) {
-            //     throw new IdeaException("No ideas found in the database.");
-            // }
             return ideas;
         } catch (Exception e) {
             throw new IdeaException("Error retrieving all ideas: " + e.getMessage());
@@ -65,7 +55,7 @@ public class IdeaService {
         if (ideaId == null || ideaId.isBlank()) {
             throw new IdeaException("Idea ID cannot be empty for editing.");
         }
-        validateIdea(newTitle, newDescription, newCategory); // Re-validate new inputs
+        validateIdea(newTitle, newDescription, newCategory);
 
         Idea ideaToEdit = DummyDatabase.getAllIdeas().stream()
                                 .filter(idea -> idea.getId().equals(ideaId))
@@ -74,8 +64,8 @@ public class IdeaService {
 
         // Cek duplikasi judul baru untuk partisipan yang sama, kecuali ide itu sendiri
         boolean isDuplicateTitleForOtherIdea = DummyDatabase.getAllIdeas().stream()
-                .filter(idea -> idea.getParticipant().equals(ideaToEdit.getParticipant())) // Ide dari partisipan yang sama
-                .filter(idea -> !idea.getId().equals(ideaId)) // Bukan ide yang sedang diedit
+                .filter(idea -> idea.getParticipant().equals(ideaToEdit.getParticipant()))
+                .filter(idea -> !idea.getId().equals(ideaId)) 
                 .anyMatch(idea -> idea.getTitle().equalsIgnoreCase(newTitle));
 
         if (isDuplicateTitleForOtherIdea) {
@@ -89,7 +79,6 @@ public class IdeaService {
         return ideaToEdit;
     }
 
-    // Metode untuk menghapus ide
     public static void deleteIdea(String ideaId) throws IdeaException {
         if (ideaId == null || ideaId.isBlank()) {
             throw new IdeaException("Idea ID cannot be empty for deletion.");
@@ -102,8 +91,7 @@ public class IdeaService {
         }
         DummyDatabase.removeVotesForIdea(ideaId);
     }
-
-    // Metode validasi input ide
+    
     private static void validateIdea(String title, String description, String category) throws IdeaException {
         if (title == null || title.isBlank()) {
             throw new IdeaException("Idea title cannot be empty.");

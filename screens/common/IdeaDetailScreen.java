@@ -27,14 +27,11 @@ public class IdeaDetailScreen extends VBox {
         this.currentUser = user;
         this.idea = idea;
 
-        // Main container styling with gradient background
         this.setStyle("-fx-background-color: linear-gradient(to bottom, " + 
                      Theme.BACKGROUND_PRIMARY + ", " + Theme.BACKGROUND_SECONDARY + ");");
 
-        // Header section with enhanced styling
         VBox header = createHeader();
-        
-        // Main content area with card-style layout
+
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
         scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
@@ -242,7 +239,7 @@ public class IdeaDetailScreen extends VBox {
                     setText(item.toString());
                     double score = item.doubleValue();
                     if (score >= 4) {
-                        setStyle("-fx-text-fill: #4CAF50; -fx-font-weight: bold;"); // Green for high scores
+                        setStyle("-fx-text-fill: #4CAF50; -fx-font-weight: bold;");
                     } else if (score >= 3) {
                         setStyle("-fx-text-fill: " + Theme.ACCENT_PRIMARY + "; -fx-font-weight: bold;"); // Blue for medium scores
                     } else {
