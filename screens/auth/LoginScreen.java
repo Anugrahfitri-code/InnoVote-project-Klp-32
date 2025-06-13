@@ -57,7 +57,6 @@ public class LoginScreen extends VBox {
         formCard.setMaxWidth(420);
         formCard.setPrefWidth(420);
         
-        // Enhanced card styling with shadow effect
         formCard.setStyle(
             "-fx-background-color: " + Theme.BACKGROUND_SECONDARY + ";" +
             "-fx-background-radius: 15px;" +
