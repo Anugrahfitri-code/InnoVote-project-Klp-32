@@ -84,3 +84,136 @@ public class ParticipantDashboard extends BorderPane {
         headerContainer.getChildren().addAll(topRow, sectionTitleLabel);
         return headerContainer;
     }
+
+        private StackPane createIdeaListSection() {
+        StackPane cardContainer = new StackPane();
+        cardContainer.setPadding(new Insets(0, 30, 0, 30)); // Add padding for table
+
+        // Background card for the table with shadow
+        Rectangle background = new Rectangle();
+        background.setFill(Color.web(Theme.BACKGROUND_SECONDARY));
+        background.setArcWidth(20);
+        background.setArcHeight(20);
+        background.widthProperty().bind(cardContainer.widthProperty().subtract(60)); // Adjust width
+        background.heightProperty().bind(cardContainer.heightProperty());
+
+        DropShadow shadow = new DropShadow();
+        shadow.setColor(Color.rgb(0, 0, 0, 0.15));
+        shadow.setOffsetY(6);
+        shadow.setRadius(15);
+        background.setEffect(shadow);
+
+        ideaTable = new TableView<>();
+        ideaTable.setPlaceholder(new Label("No ideas submitted yet. Click 'Submit New Idea' to start!"));
+        ideaTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); // Make columns fill width
+        ideaTable.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;"); // Table background transparent
+
+        TableColumn<Idea, String> titleCol = new TableColumn<>("Title");
+        titleCol.setCellValueFactory(cell -> cell.getValue().titleProperty());
+        titleCol.setPrefWidth(200); // Set preferred width
+        titleCol.setStyle("-fx-font-size: 13px; -fx-font-weight: bold;"); // Adjusted font size
+
+        TableColumn<Idea, String> descriptionCol = new TableColumn<>("Description");
+        descriptionCol.setCellValueFactory(cell -> new ReadOnlyStringWrapper(
+                cell.getValue().getDescription().length() > 60 ? // Slightly longer snippet
+                cell.getValue().getDescription().substring(0, 57) + "..." :
+                cell.getValue().getDescription()
+        ));
+        descriptionCol.setPrefWidth(300); // Set preferred width
+        descriptionCol.setStyle("-fx-font-size: 12px;"); // Adjusted font size
+
+        TableColumn<Idea, String> categoryCol = new TableColumn<>("Category");
+        categoryCol.setCellValueFactory(cell -> cell.getValue().categoryProperty());
+        categoryCol.setPrefWidth(120); // Set preferred width
+        categoryCol.setStyle("-fx-font-size: 12px;"); // Adjusted font size
+
+        TableColumn<Idea, Number> scoreCol = new TableColumn<>("Avg Score");
+        scoreCol.setCellValueFactory(cell -> cell.getValue().averageScoreProperty());
+        scoreCol.setPrefWidth(90); // Set preferred width
+        scoreCol.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-alignment: CENTER;"); // Adjusted font size and alignment
+
+        // Kolom Aksi untuk Edit, Hapus, dan Lihat Detail
+        TableColumn<Idea, Void> actionCol = new TableColumn<>("Actions");
+        actionCol.setPrefWidth(240); // Adjusted preferred width for action buttons
+        actionCol.setResizable(false); // Disable resizing for action column
+        actionCol.setStyle("-fx-alignment: CENTER;"); // Center align buttons
+
+        actionCol.setCellFactory(param -> new TableCell<>() {
+            private final Button editBtn = new Button("Edit");
+            private final Button deleteBtn = new Button("Delete");
+            private final Button detailBtn = new Button("Details"); // Changed text to be shorter
+            private final HBox pane = new HBox(8, editBtn, deleteBtn, detailBtn); // Adjusted spacing
+
+            {
+                pane.setAlignment(Pos.CENTER);
+                // Apply themed styles to action buttons
+                applySmallPrimaryButtonStyle(editBtn, Theme.ACCENT_PRIMARY); // Green-like for edit
+                applySmallSecondaryButtonStyle(deleteBtn, Theme.DANGER_COLOR); // Red-like for delete
+                applySmallPrimaryButtonStyle(detailBtn, Theme.INFO_COLOR); // Blue-like for details
+
+                editBtn.setPrefWidth(60); // Set fixed width for small buttons
+                deleteBtn.setPrefWidth(60);
+                detailBtn.setPrefWidth(60);
+
+                editBtn.setOnAction(event -> {
+                    Idea idea = getTableView().getItems().get(getIndex());
+                    showEditIdeaDialog(idea);
+                });
+
+                deleteBtn.setOnAction(event -> {
+                    Idea idea = getTableView().getItems().get(getIndex());
+                    confirmAndDeleteIdea(idea);
+                });
+
+                detailBtn.setOnAction(event -> {
+                    Idea idea = getTableView().getItems().get(getIndex());
+                    SceneManager.switchToScreen(new IdeaDetailScreen(currentParticipant, idea));
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(pane);
+                }
+            }
+        });
+
+        ideaTable.getColumns().addAll(titleCol, descriptionCol, categoryCol, scoreCol, actionCol);
+
+        cardContainer.getChildren().addAll(background, ideaTable); // Add table on top of background
+        StackPane.setMargin(ideaTable, new Insets(15)); // Margin for table inside card
+        
+        return cardContainer;
+    }
+
+    private HBox createActionButtonSection() {
+        HBox bottomHBox = new HBox(15); // Adjusted spacing
+        bottomHBox.setAlignment(Pos.CENTER_RIGHT);
+        bottomHBox.setPadding(new Insets(15, 30, 25, 30)); // Adjusted padding
+
+        Button submitNewIdeaBtn = new Button("🚀 Submit New Idea");
+        applyPrimaryButtonStyle(submitNewIdeaBtn); // Apply themed style
+        submitNewIdeaBtn.setPrefWidth(180); // Adjusted button size
+        submitNewIdeaBtn.setPrefHeight(45);
+        submitNewIdeaBtn.setOnAction(e -> {
+            SceneManager.switchToScreen(new IdeaSubmissionScreen(currentParticipant));
+        });
+
+        bottomHBox.getChildren().addAll(submitNewIdeaBtn);
+        return bottomHBox;
+    }
+
+    // Metode untuk memuat ide partisipan
+    private void loadParticipantIdeas() {
+        try {
+            ideaTable.setItems(FXCollections.observableArrayList(IdeaService.getIdeasByParticipant(currentParticipant)));
+        } catch (IdeaException e) {
+            AlertHelper.showAlert(AlertType.ERROR, "Error Loading Ideas", "Failed to load your ideas: " + e.getMessage());
+        }
+    }
+
+
