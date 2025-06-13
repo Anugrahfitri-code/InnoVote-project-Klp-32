@@ -216,4 +216,144 @@ public class ParticipantDashboard extends BorderPane {
         }
     }
 
+    // Dialog untuk mengedit ide
+    private void showEditIdeaDialog(Idea idea) {
+        Dialog<Idea> dialog = new Dialog<>();
+        dialog.setTitle("Edit Idea");
+        dialog.setHeaderText("Edit details for: " + idea.getTitle());
 
+        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 30, 10, 10)); // Adjusted padding
+
+        TextField titleField = new TextField(idea.getTitle());
+        titleField.setPromptText("Idea Title");
+        applyEnhancedInputStyles(titleField); // Apply enhanced style
+
+        TextArea descriptionArea = new TextArea(idea.getDescription());
+        descriptionArea.setWrapText(true);
+        descriptionArea.setPrefRowCount(4); // Adjusted row count
+        descriptionArea.setPromptText("Detailed Description");
+        applyEnhancedInputStyles(descriptionArea); // Apply enhanced style
+
+        ComboBox<String> categoryComboBox = new ComboBox<>(); // Changed to ComboBox
+        categoryComboBox.getItems().addAll( // Same categories as submission screen
+            "🌍 Environment & Sustainability",
+            "🤖 Artificial Intelligence",
+            "📚 Education & Learning",
+            "🏥 Healthcare & Medicine",
+            "💼 Business & Finance",
+            "🎨 Arts & Creative",
+            "🔬 Science & Research",
+            "🏠 Smart Home & IoT",
+            "🚗 Transportation",
+            "🍕 Food & Agriculture",
+            "🎮 Gaming & Entertainment",
+            "📱 Mobile Technology",
+            "🔒 Security & Privacy",
+            "Other"
+        );
+        categoryComboBox.setPromptText("Select Category");
+        categoryComboBox.setValue(idea.getCategory()); // Set current category
+        applyComboBoxStyles(categoryComboBox); // Apply combo box style
+
+        grid.add(new Label("Title:"), 0, 0);
+        grid.add(titleField, 1, 0);
+        grid.add(new Label("Description:"), 0, 1);
+        grid.add(descriptionArea, 1, 1);
+        grid.add(new Label("Category:"), 0, 2);
+        grid.add(categoryComboBox, 1, 2); // Use ComboBox here
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Request focus on title field
+        dialog.setOnShown(e -> titleField.requestFocus());
+
+        // Mengaktifkan tombol Save hanya jika judul dan deskripsi tidak kosong
+        Node saveButton = dialog.getDialogPane().lookupButton(saveButtonType);
+        saveButton.setDisable(titleField.getText().trim().isEmpty() || descriptionArea.getText().trim().isEmpty() || categoryComboBox.getValue() == null);
+
+        titleField.textProperty().addListener((observable, oldValue, newValue) -> {
+            saveButton.setDisable(newValue.trim().isEmpty() || descriptionArea.getText().trim().isEmpty() || categoryComboBox.getValue() == null);
+        });
+        descriptionArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            saveButton.setDisable(titleField.getText().trim().isEmpty() || newValue.trim().isEmpty() || categoryComboBox.getValue() == null);
+        });
+        categoryComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            saveButton.setDisable(titleField.getText().trim().isEmpty() || descriptionArea.getText().trim().isEmpty() || newValue == null);
+        });
+
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButtonType) {
+                try {
+                    String category = categoryComboBox.getValue().replaceAll("^[^\\p{L}\\d\\s]+\\s*", ""); // Clean category
+                    IdeaService.editIdea(idea.getId(), titleField.getText(), descriptionArea.getText(), category);
+                    AlertHelper.showAlert(AlertType.INFORMATION, "Success", "Idea '" + titleField.getText() + "' updated successfully.");
+                    loadParticipantIdeas(); // Reload ideas to reflect changes
+                } catch (IdeaException e) {
+                    AlertHelper.showAlert(AlertType.ERROR, "Edit Idea Error", e.getMessage());
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
+    }
+
+    // Konfirmasi dan hapus ide
+    private void confirmAndDeleteIdea(Idea idea) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Delete Confirmation");
+        alert.setHeaderText("Delete Idea: " + idea.getTitle());
+        alert.setContentText("Are you sure you want to delete this idea? This action cannot be undone.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                IdeaService.deleteIdea(idea.getId());
+                AlertHelper.showAlert(AlertType.INFORMATION, "Success", "Idea '" + idea.getTitle() + "' deleted successfully.");
+                loadParticipantIdeas(); // Reload ideas
+            } catch (IdeaException e) {
+                AlertHelper.showAlert(AlertType.ERROR, "Delete Idea Error", e.getMessage());
+            }
+        }
+    }
+
+    // --- Common Styling Methods (copied and adjusted from IdeaSubmissionScreen) ---
+
+    // Primary Button Style (for Submit New Idea)
+    private void applyPrimaryButtonStyle(Button button) {
+        String baseStyle = String.format(
+            "-fx-background-color: linear-gradient(to bottom, %s, %s); " +
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-font-size: 13px; " +
+            "-fx-background-radius: 10; " +
+            "-fx-padding: 10 22; " +
+            "-fx-cursor: hand; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 0, 3);",
+            Theme.ACCENT_PRIMARY, adjustBrightness(Theme.ACCENT_PRIMARY, -0.1)
+        );
+
+        String hoverStyle = String.format(
+            "-fx-background-color: linear-gradient(to bottom, %s, %s); " +
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-font-size: 13px; " +
+            "-fx-background-radius: 10; " +
+            "-fx-padding: 10 22; " +
+            "-fx-cursor: hand; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 4); " +
+            "-fx-scale-y: 1.03; -fx-scale-x: 1.03;", // Slightly reduced scale effect
+            Theme.ACCENT_PRIMARY_HOVER, adjustBrightness(Theme.ACCENT_PRIMARY_HOVER, -0.1)
+        );
+
+        button.setStyle(baseStyle);
+        button.setOnMouseEntered(e -> button.setStyle(hoverStyle));
+        button.setOnMouseExited(e -> button.setStyle(baseStyle));
+    }
