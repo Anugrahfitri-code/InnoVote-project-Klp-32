@@ -3,7 +3,11 @@ package com.innovote.screens.common;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.collections.FXCollections;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
+import javafx.scene.effect.DropShadow;
 import com.innovote.models.Idea;
 import com.innovote.models.Vote;
 import com.innovote.models.User;
@@ -23,78 +27,291 @@ public class IdeaDetailScreen extends VBox {
         this.currentUser = user;
         this.idea = idea;
 
-        this.setStyle("-fx-background-color: " + Theme.BACKGROUND_PRIMARY + ";");
+        // Main container styling with gradient background
+        this.setStyle("-fx-background-color: linear-gradient(to bottom, " + 
+                     Theme.BACKGROUND_PRIMARY + ", " + Theme.BACKGROUND_SECONDARY + ");");
 
-        Label screenTitle = new Label("Idea Details");
-        screenTitle.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
+        // Header section with enhanced styling
+        VBox header = createHeader();
+        
+        // Main content area with card-style layout
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+        
+        VBox mainContent = new VBox(20);
+        mainContent.setPadding(new Insets(20));
+        
+        // Enhanced idea information card
+        VBox ideaCard = createIdeaInfoCard();
+        
+        // Enhanced votes section
+        VBox votesSection = createVotesSection();
+        
+        // Action buttons section
+        HBox actionButtons = createActionButtons();
+        
+        mainContent.getChildren().addAll(ideaCard, votesSection, actionButtons);
+        scrollPane.setContent(mainContent);
 
-        // Tabel untuk menampilkan detail votes
+        this.getChildren().addAll(header, scrollPane);
+        this.setSpacing(0);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+    }
+
+    private VBox createHeader() {
+        VBox header = new VBox();
+        header.setAlignment(Pos.CENTER);
+        header.setPadding(new Insets(20, 20, 10, 20));
+        header.setStyle("-fx-background-color: " + Theme.BACKGROUND_PRIMARY + ";" +
+                       "-fx-border-color: " + Theme.BORDER_COLOR + ";" +
+                       "-fx-border-width: 0 0 2 0;");
+
+        Label screenTitle = new Label("💡 Idea Details");
+        screenTitle.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; " +
+                           "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";" +
+                           "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 2, 0, 0, 1);");
+
+        Label subtitle = new Label("Comprehensive view of idea and community feedback");
+        subtitle.setStyle("-fx-font-size: 14px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
+
+        header.getChildren().addAll(screenTitle, subtitle);
+        return header;
+    }
+
+    private VBox createIdeaInfoCard() {
+        VBox ideaCard = new VBox(15);
+        ideaCard.setStyle("-fx-background-color: " + Theme.BACKGROUND_SECONDARY + ";" +
+                         "-fx-background-radius: 15;" +
+                         "-fx-border-color: " + Theme.BORDER_COLOR + ";" +
+                         "-fx-border-radius: 15;" +
+                         "-fx-border-width: 1;" +
+                         "-fx-padding: 25;" +
+                         "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 2);");
+
+        // Card header
+        HBox cardHeader = new HBox();
+        cardHeader.setAlignment(Pos.CENTER_LEFT);
+        
+        Label cardTitle = new Label("📋 Idea Information");
+        cardTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; " +
+                          "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
+        
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        
+        Label scoreLabel = new Label(String.format("⭐ %.1f", idea.getAverageScore()));
+        scoreLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; " +
+                           "-fx-text-fill: " + Theme.ACCENT_PRIMARY + ";" +
+                           "-fx-background-color: " + Theme.BACKGROUND_TERTIARY + ";" +
+                           "-fx-background-radius: 20;" +
+                           "-fx-padding: 8 15;");
+        
+        cardHeader.getChildren().addAll(cardTitle, spacer, scoreLabel);
+
+        // Separator line
+        Separator separator1 = new Separator();
+        separator1.setStyle("-fx-background-color: " + Theme.BORDER_COLOR + ";");
+
+        // Information grid
+        GridPane infoGrid = new GridPane();
+        infoGrid.setHgap(20);
+        infoGrid.setVgap(12);
+        infoGrid.setAlignment(Pos.TOP_LEFT);
+
+        // Add information rows to grid
+        addInfoToGrid(infoGrid, 0, "📝 Title:", idea.getTitle(), true);
+        addInfoToGrid(infoGrid, 1, "📄 Description:", idea.getDescription(), false);
+        addInfoToGrid(infoGrid, 2, "🏷️ Category:", idea.getCategory(), false);
+        addInfoToGrid(infoGrid, 3, "👤 Author:", idea.getParticipant().getUsername(), false);
+
+        ideaCard.getChildren().addAll(cardHeader, separator1, infoGrid);
+        return ideaCard;
+    }
+
+    private void addInfoToGrid(GridPane grid, int row, String labelText, String valueText, boolean isTitle) {
+        Label label = new Label(labelText);
+        label.setStyle("-fx-font-weight: bold; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";" +
+                    "-fx-font-size: 14px; -fx-min-width: 120;");
+
+        Label value = createWrappedLabel(valueText);
+        if (isTitle) {
+            value.setStyle("-fx-text-fill: " + Theme.TEXT_PRIMARY + ";" +
+                        "-fx-font-size: 18px; -fx-font-weight: bold;");
+        } else {
+            value.setStyle("-fx-text-fill: " + Theme.TEXT_PRIMARY + ";" +
+                        "-fx-font-size: 14px;");
+        }
+
+        grid.add(label, 0, row);
+        grid.add(value, 1, row);
+        
+        // Set column constraints
+        if (grid.getColumnConstraints().isEmpty()) {
+            ColumnConstraints col1 = new ColumnConstraints();
+            col1.setMinWidth(120);
+            col1.setPrefWidth(120);
+            
+            ColumnConstraints col2 = new ColumnConstraints();
+            col2.setHgrow(Priority.ALWAYS);
+            
+            grid.getColumnConstraints().addAll(col1, col2);
+        }
+    }
+
+    private VBox createVotesSection() {
+        VBox votesSection = new VBox(15);
+        votesSection.setStyle("-fx-background-color: " + Theme.BACKGROUND_SECONDARY + ";" +
+                            "-fx-background-radius: 15;" +
+                            "-fx-border-color: " + Theme.BORDER_COLOR + ";" +
+                            "-fx-border-radius: 15;" +
+                            "-fx-border-width: 1;" +
+                            "-fx-padding: 25;" +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 2);");
+
+        // Votes header with statistics
+        HBox votesHeader = createVotesHeader();
+        
+        Separator separator2 = new Separator();
+        separator2.setStyle("-fx-background-color: " + Theme.BORDER_COLOR + ";");
+
+        // Enhanced table for votes
+        TableView<Vote> voteTable = createEnhancedVoteTable();
+
+        votesSection.getChildren().addAll(votesHeader, separator2, voteTable);
+        return votesSection;
+    }
+
+    private HBox createVotesHeader() {
+        HBox votesHeader = new HBox();
+        votesHeader.setAlignment(Pos.CENTER_LEFT);
+        
+        Label votesTitle = new Label("🗳️ Community Votes");
+        votesTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; " +
+                        "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
+        
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        
+        // Vote statistics
+        List<Vote> votesForThisIdea = DummyDatabase.getVotes().stream()
+                                    .filter(v -> v.getIdea().equals(idea))
+                                    .collect(Collectors.toList());
+        
+        Label voteCount = new Label(votesForThisIdea.size() + " votes");
+        voteCount.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; " +
+                        "-fx-text-fill: " + Theme.ACCENT_PRIMARY + ";" +
+                        "-fx-background-color: " + Theme.BACKGROUND_TERTIARY + ";" +
+                        "-fx-background-radius: 15;" +
+                        "-fx-padding: 6 12;");
+        
+        votesHeader.getChildren().addAll(votesTitle, spacer, voteCount);
+        return votesHeader;
+    }
+
+    private TableView<Vote> createEnhancedVoteTable() {
         TableView<Vote> voteTable = new TableView<>();
-        voteTable.setPlaceholder(new Label("No votes yet."));
-        voteTable.setPrefHeight(200);
-        voteTable.setStyle("-fx-background-color: " + Theme.BACKGROUND_SECONDARY + ";");
+        voteTable.setPlaceholder(new Label("No votes submitted yet for this idea."));
+        voteTable.setPrefHeight(300);
+        voteTable.setStyle("-fx-background-color: " + Theme.BACKGROUND_TERTIARY + ";" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-border-color: " + Theme.BORDER_COLOR + ";" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-border-width: 1;");
 
-        TableColumn<Vote, String> voterCol = new TableColumn<>("Voter");
+        // Enhanced table columns
+        TableColumn<Vote, String> voterCol = new TableColumn<>("👤 Voter");
         voterCol.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getVoter().getUsername()));
         voterCol.setPrefWidth(150);
+        voterCol.setStyle("-fx-alignment: CENTER-LEFT;");
 
-        TableColumn<Vote, Number> scoreCol = new TableColumn<>("Score");
+        TableColumn<Vote, Number> scoreCol = new TableColumn<>("⭐ Score");
         scoreCol.setCellValueFactory(cellData -> cellData.getValue().scoreProperty());
-        scoreCol.setPrefWidth(80);
+        scoreCol.setPrefWidth(100);
+        scoreCol.setStyle("-fx-alignment: CENTER;");
+        
+        // Custom cell factory for score column to add styling
+        scoreCol.setCellFactory(column -> new TableCell<Vote, Number>() {
+            @Override
+            protected void updateItem(Number item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item.toString());
+                    double score = item.doubleValue();
+                    if (score >= 4) {
+                        setStyle("-fx-text-fill: #4CAF50; -fx-font-weight: bold;"); // Green for high scores
+                    } else if (score >= 3) {
+                        setStyle("-fx-text-fill: " + Theme.ACCENT_PRIMARY + "; -fx-font-weight: bold;"); // Blue for medium scores
+                    } else {
+                        setStyle("-fx-text-fill: #FF9800; -fx-font-weight: bold;"); // Orange for low scores
+                    }
+                }
+            }
+        });
 
-        TableColumn<Vote, String> commentCol = new TableColumn<>("Comment");
+        TableColumn<Vote, String> commentCol = new TableColumn<>("💬 Comment");
         commentCol.setCellValueFactory(cellData -> cellData.getValue().commentProperty());
-        commentCol.setPrefWidth(300);
+        commentCol.setPrefWidth(350);
+        commentCol.setStyle("-fx-alignment: CENTER-LEFT;");
 
         voteTable.getColumns().addAll(voterCol, scoreCol, commentCol);
 
-        // Memuat votes yang relevan dengan ide ini
+        // Load votes data
         List<Vote> votesForThisIdea = DummyDatabase.getVotes().stream()
-                                        .filter(v -> v.getIdea().equals(idea))
-                                        .collect(Collectors.toList());
+                                    .filter(v -> v.getIdea().equals(idea))
+                                    .collect(Collectors.toList());
         voteTable.setItems(FXCollections.observableArrayList(votesForThisIdea));
 
-        Button backButton = new Button("Back to Dashboard");
-        backButton.setOnAction(e -> SceneManager.switchToUserDashboard(currentUser));
-        backButton.setStyle("-fx-background-color: " + Theme.ACCENT_PRIMARY + "; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 5;");
-
-        VBox ideaInfo = new VBox(5,
-            createInfoRow("Title:", idea.getTitle()),
-            createInfoRow("Description:", idea.getDescription()),
-            createInfoRow("Category:", idea.getCategory()),
-            createInfoRow("Author:", idea.getParticipant().getUsername()),
-            createInfoRow("Average Score:", String.format("%.1f", idea.getAverageScore()))
-        );
-        ideaInfo.setStyle("-fx-background-color: " + Theme.BACKGROUND_SECONDARY + "; -fx-padding: 15; -fx-background-radius: 10;");
-
-        Label votesLabel = new Label("All Votes:");
-        votesLabel.setStyle("-fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
-
-        this.getChildren().addAll(
-            screenTitle,
-            ideaInfo,
-            new Separator(),
-            votesLabel,
-            voteTable,
-            backButton
-        );
-        this.setSpacing(10);
-        this.setPadding(new Insets(20));
+        return voteTable;
     }
 
-    private HBox createInfoRow(String labelText, String valueText) {
-        Label label = new Label(labelText);
-        label.setStyle("-fx-font-weight: bold; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
-        Label value = createWrappedLabel(valueText);
-        value.setStyle("-fx-text-fill: white;");
-        HBox row = new HBox(10, label, value);
-        return row;
+    private HBox createActionButtons() {
+        HBox actionButtons = new HBox(15);
+        actionButtons.setAlignment(Pos.CENTER);
+        actionButtons.setPadding(new Insets(10, 0, 0, 0));
+
+        Button backButton = new Button("← Back to Dashboard");
+        backButton.setOnAction(e -> SceneManager.switchToUserDashboard(currentUser));
+        backButton.setStyle("-fx-background-color: " + Theme.ACCENT_PRIMARY + ";" +
+                        "-fx-text-fill: " + Theme.BACKGROUND_PRIMARY + ";" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-background-radius: 25;" +
+                        "-fx-padding: 12 25;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 1);");
+        
+        backButton.setOnMouseEntered(e -> 
+            backButton.setStyle("-fx-background-color: " + Theme.ACCENT_PRIMARY_HOVER + ";" +
+                            "-fx-text-fill: " + Theme.BACKGROUND_PRIMARY + ";" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-font-size: 14px;" +
+                            "-fx-background-radius: 25;" +
+                            "-fx-padding: 12 25;" +
+                            "-fx-cursor: hand;" +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 6, 0, 0, 2);"));
+        
+        backButton.setOnMouseExited(e -> 
+            backButton.setStyle("-fx-background-color: " + Theme.ACCENT_PRIMARY + ";" +
+                            "-fx-text-fill: " + Theme.BACKGROUND_PRIMARY + ";" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-font-size: 14px;" +
+                            "-fx-background-radius: 25;" +
+                            "-fx-padding: 12 25;" +
+                            "-fx-cursor: hand;" +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 1);"));
+
+        actionButtons.getChildren().add(backButton);
+        return actionButtons;
     }
 
     private Label createWrappedLabel(String text) {
         Label label = new Label(text);
         label.setWrapText(true);
-        label.setMaxWidth(400);
+        label.setMaxWidth(500);
         return label;
     }
 }
