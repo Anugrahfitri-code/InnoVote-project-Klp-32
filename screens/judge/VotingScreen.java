@@ -198,17 +198,19 @@ public class VotingScreen extends ScrollPane {
         return formSection;
     }
 
-    private VBox createScoreSlider() {
-        VBox sliderContainer = new VBox(6); 
+     private VBox createScoreSlider() {
+        VBox sliderContainer = new VBox(6);
         sliderContainer.setAlignment(Pos.CENTER);
-        sliderContainer.setMaxWidth(350); 
+        sliderContainer.setMaxWidth(350);
 
         scoreSlider = new Slider(0, 4, 2.0);
         scoreSlider.setShowTickLabels(true);
         scoreSlider.setShowTickMarks(true);
-        scoreSlider.setMajorTickUnit(1.0);
-        scoreSlider.setMinorTickCount(0);
-        scoreSlider.setSnapToTicks(true);
+        scoreSlider.setMajorTickUnit(1.0); 
+
+        scoreSlider.setMinorTickCount(9); 
+        scoreSlider.setSnapToTicks(false); 
+
         scoreSlider.setPrefWidth(300);
 
         scoreSlider.setStyle(
@@ -218,15 +220,14 @@ public class VotingScreen extends ScrollPane {
         );
 
         scoreValueLabel = new Label("2.0");
-        scoreValueLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; " + 
+        scoreValueLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; " +
                                  "-fx-text-fill: " + Theme.ACCENT_PRIMARY + "; " +
                                  "-fx-background-color: " + adjustBrightness(Theme.ACCENT_PRIMARY, 0.9) + "; " +
-                                 "-fx-padding: 6 12; -fx-background-radius: 15;"); 
+                                 "-fx-padding: 6 12; -fx-background-radius: 15;");
 
         scoreSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             double roundedValue = Math.round(newVal.doubleValue() * 10.0) / 10.0;
             scoreValueLabel.setText(String.format("%.1f", roundedValue));
-            scoreSlider.setValue(roundedValue);
         });
 
         HBox scoreLabels = new HBox();
