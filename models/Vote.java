@@ -1,4 +1,4 @@
-package com.innovote.models;
+package models;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -8,11 +8,11 @@ import javafx.beans.property.StringProperty;
 public class Vote {
     private final String id;
     private final Idea idea;
-    private final Judge voter; 
+    private final Judge voter;
     private final DoubleProperty score;
     private final StringProperty comment;
 
-    public Vote(String id, Idea idea, Judge voter, int score, String comment) {
+    public Vote(String id, Idea idea, Judge voter, double score, String comment) {
         this.id = id;
         this.idea = idea;
         this.voter = voter;
@@ -32,7 +32,7 @@ public class Vote {
         return voter;
     }
 
-    public IntegerProperty scoreProperty() {
+    public DoubleProperty scoreProperty() {
         return score;
     }
 
@@ -40,7 +40,7 @@ public class Vote {
         return comment;
     }
 
-    public int getScore() {
+    public double getScore() {
         return score.get();
     }
 
