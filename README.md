@@ -1,46 +1,109 @@
-# 🗳️ InnoVote Project
-*InnoVote* adalah aplikasi desktop berbasis JavaFX yang memungkinkan pengguna untuk mengirimkan ide-ide inovatif secara interaktif, serta memungkinkan admin untuk mengelola dan mereview ide-ide yang masuk. Aplikasi ini dibangun dengan pendekatan Object-Oriented Programming (OOP) dan arsitektur modular.
+# InnoVote – Sistem Event & Voting Komunitas Inovator
+
+## 📅 Event
+Kompetisi Ide Inovasi Mahasiswa 2025
+
+## 🧠 Deskripsi Aplikasi
+**InnoVote** adalah aplikasi berbasis JavaFX yang dirancang untuk mendukung event kompetisi inovasi mahasiswa. Aplikasi ini memungkinkan:
+
+- Pendaftaran peserta acara kompetisi inovasi
+- Manajemen komunitas peserta berdasarkan topik inovasi
+- Voting ide terbaik oleh anggota komunitas
+- Pengelolaan ide dan komentar dari juri
 
 ---
 
-## 🧠 Latar Belakang
-Dalam dunia yang terus berkembang, inovasi menjadi kunci untuk kemajuan. Namun, banyak organisasi, sekolah, atau komunitas kesulitan dalam mengelola dan menampung ide dari anggotanya. Oleh karena itu, **InnoVote** hadir sebagai solusi digital untuk menampung ide dari berbagai partisipan dan mempermudah admin dalam mengelolanya.
+## 🖥️ Scene Aplikasi
+
+### 🔐 Scene 1 – Login / Pendaftaran User
+- User dapat login sebagai **Peserta** atau **Juri**
+- Jika belum memiliki akun, pengguna dapat mendaftar melalui halaman pendaftaran
+
+### 🏠 Scene 2 – Halaman Utama
+- **Peserta**
+  - Mendaftarkan ide inovasi
+  - Melihat ide-ide dari peserta lain
+
+- **Juri**
+  - Melihat semua ide peserta
+  - Memberikan vote dan komentar pada ide yang dipilih
 
 ---
 
-## 🔍 Deskripsi Proyek
-*InnoVote* dirancang sebagai aplikasi desktop berbasis Java yang memiliki dua peran utama:
-    - **Partisipan** dapat mengisi identitas dan mengirimkan ide mereka.
-    - **Admin** dapat melihat dan mengelola seluruh ide yang telah dikirimkan.
-        Semua data disimpan secara lokal dalam file teks, tanpa menggunakan database eksternal, sehingga ringan dan mudah dijalankan.
+## 🌟 Fitur Tambahan
+- Daftar komunitas inovator berdasarkan topik (AI, Lingkungan, Kesehatan, dll.)
+- Statistik jumlah vote per ide
+- Deadline waktu voting
+
 ---
 
-## 📦 Cara Menjalankan Aplikasi
-### ✅ Prasyarat
-- Java Development Kit (JDK) 17+
-- Apache Maven
-- JavaFX SDK (sesuai versi JDK)
+## 💡 Penerapan OOP
 
-### ▶️ Langkah Menjalankan
-1. *Clone repository*
-   ```bash
-    git clone https://github.com/Anugrahfitri-code/InnoVote-project-Klp-32.git
-    cd InnoVoteProject
-2. *Jalankan Aplikasi*
-    mvn clean javafx:run
+### ✅ Encapsulation
+- Atribut dalam class `User`, `Idea`, `Vote`, `Community` bersifat private, dengan akses melalui setter dan getter
 
-## Structur Project
-InnoVoteProject/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/innovote/
-│   │   │       ├── models/         # Kelas data: Participant, Idea
-│   │   │       ├── screens/        # UI JavaFX: AdminScreen, ParticipantScreen, dsb
-│   │   │       ├── services/       # Layanan logika: IdeaService, FileService
-│   │   │       └── utils/          # Utilitas umum: Theme, AlertUtil
-│   └── test/                       # Pengujian (optional)
-├── lib/                            # Library eksternal
-├── pom.xml                         # Konfigurasi Maven
-└── README.md                       # Dokumentasi proyek ini
+### 🧬 Inheritance
+- Superclass: `User`
+- Subclass: `Participant`, `Judge`
 
+### 🔍 Abstraction
+- Kelas abstrak `EventUser` dengan method abstrak seperti `showDashboard()`, `submitIdea()`, yang diimplementasi berbeda oleh subclass
+
+### 🔁 Polymorphism
+- Method `voteIdea()` dioverride:
+  - `Judge` dapat melakukan voting
+  - `Participant` tidak dapat melakukan voting
+
+---
+
+## 👥 Anggota Tim
+
+| NIM         | Nama Lengkap                | Kontribusi                                                                 |
+|-------------|-----------------------------|----------------------------------------------------------------------------|
+| H071241080  | Hanifah Atthahira Basir     | `models/User`, `Judge`, `Participant`<br>`screens/auth/LoginScreen`, `RegisterScreen`<br>`services/AuthService`<br>`session/Session`<br>`utils/Validator`, `AlertHelper`<br>`exceptions/AuthException` |
+| H071241026  | Natasya                     | `models/Idea`, `EventUser`<br>`screens/participant/IdeaSubmissionScreen`, `ParticipantDashboardScreen`<br>`screens/common/IdeaDetailScreen`<br>`services/IdeaService`<br>`exceptions/IdeaException` |
+| H071241058  | Anugrah Fitri Novanda       | `models/Vote`<br>`screens/judge/JudgeDashboardScreen`, `VotingScreen`<br>`services/VotingService`<br>`exceptions/VotingException`<br>`utils/SceneManager`, `DummyDataBase`.  `Theme` |
+
+---
+
+## 📁 Struktur Proyek
+├── models/
+│ ├── User.java
+│ ├── Judge.java
+│ ├── Participant.java
+│ ├── Idea.java
+│ ├── EventUser.java
+│ └── Vote.java
+│
+├── screens/
+│ ├── auth/
+│ │ ├── LoginScreen.java
+│ │ └── RegisterScreen.java
+│ ├── participant/
+│ │ ├── IdeaSubmissionScreen.java
+│ │ └── ParticipantDashboardScreen.java
+│ ├── judge/
+│ │ ├── JudgeDashboardScreen.java
+│ │ └── VotingScreen.java
+│ └── common/
+│ └── IdeaDetailScreen.java
+│
+├── services/
+│ ├── AuthService.java
+│ ├── IdeaService.java
+│ └── VotingService.java
+│
+├── session/
+│ └── Session.java
+│
+├── utils/
+│ ├── Validator.java
+│ ├── AlertHelper.java
+│ ├── SceneManager.java
+│ └── DummyDataBase.java
+└ ── Theme.java
+│
+└── exceptions/
+├── AuthException.java
+├── IdeaException.java
+└── VotingException.java
