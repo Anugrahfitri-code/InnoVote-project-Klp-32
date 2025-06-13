@@ -1,19 +1,20 @@
-package com.innovote.utils;
+package utils;
 
-import javafx.stage.Stage;
-import javafx.scene.Scene;
+import models.Judge;
+import models.Participant;
+import models.User;
+import screens.auth.LoginScreen;
+import screens.auth.RegisterScreen;
+import screens.common.IdeaDetailScreen;
+import screens.judge.JudgeDashboard;
+import screens.judge.VotingScreen;
+import screens.participant.IdeaSubmissionScreen;
+import screens.participant.ParticipantDashboard;
+
 import javafx.scene.Parent;
-import com.innovote.models.User;
-import com.innovote.models.Judge;
-import com.innovote.models.Participant;
-import com.innovote.screens.auth.LoginScreen;
-import com.innovote.screens.judge.JudgeDashboard;
-import com.innovote.screens.participant.ParticipantDashboard;
-import com.innovote.screens.auth.RegisterScreen;
-import com.innovote.screens.participant.IdeaSubmissionScreen;
-import com.innovote.screens.judge.VotingScreen;
-import com.innovote.screens.common.IdeaDetailScreen;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType; 
+import javafx.stage.Stage; 
 
 public class SceneManager {
     private static Stage primaryStage;
@@ -23,7 +24,7 @@ public class SceneManager {
     }
 
     public static void switchToScreen(Parent screenNode) {
-        String title = "InnoVote"; // Default title
+        String title = "InnoVote"; 
 
         if (screenNode instanceof LoginScreen) {
             title = "InnoVote - Login";
@@ -58,7 +59,7 @@ public class SceneManager {
         switchToScreen(new LoginScreen()); 
     }
 
-    public static void switchToRegister() {
+    public static void switchToRegister() { 
         switchToScreen(new RegisterScreen());
     }
 
