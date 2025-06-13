@@ -39,7 +39,6 @@ public class IdeaSubmissionScreen extends ScrollPane {
     public IdeaSubmissionScreen(Participant participant) {
         this.currentParticipant = participant;
 
-        // Main container
         VBox mainContainer = new VBox();
         mainContainer.setStyle("-fx-background-color: linear-gradient(to bottom, " + 
                             Theme.BACKGROUND_PRIMARY + ", " + 
@@ -49,13 +48,8 @@ public class IdeaSubmissionScreen extends ScrollPane {
         mainContainer.setAlignment(Pos.TOP_CENTER);
         mainContainer.setMinHeight(900);
 
-        // Header section
         VBox headerSection = createHeaderSection();
-        
-        // Form card
         StackPane formCard = createFormCard();
-        
-        // Action buttons
         HBox buttonSection = createButtonSection();
 
         mainContainer.getChildren().addAll(
@@ -64,7 +58,6 @@ public class IdeaSubmissionScreen extends ScrollPane {
             buttonSection
         );
 
-        // Configure ScrollPane
         this.setContent(mainContainer);
         this.setFitToWidth(true);
         this.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -79,12 +72,12 @@ public class IdeaSubmissionScreen extends ScrollPane {
 
         Label titleLabel = new Label("💡 Submit Your Innovation");
         titleLabel.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; " +
-                          "-fx-text-fill: " + Theme.TEXT_PRIMARY + "; " +
-                          "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);");
+                        "-fx-text-fill: " + Theme.TEXT_PRIMARY + "; " +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);");
 
         Label subtitleLabel = new Label("Share your brilliant idea and make it come to life");
         subtitleLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: " + Theme.TEXT_SECONDARY + "; " +
-                             "-fx-font-style: italic;");
+                            "-fx-font-style: italic;");
 
         // Welcome message
         Label welcomeLabel = new Label("Welcome, " + currentParticipant.getUsername() + "!");
@@ -102,7 +95,6 @@ public class IdeaSubmissionScreen extends ScrollPane {
         cardContainer.setMaxWidth(800);
         cardContainer.setPrefWidth(800);
 
-        // Background with shadow
         Rectangle background = new Rectangle();
         background.setFill(Color.web(Theme.BACKGROUND_SECONDARY));
         background.setArcWidth(20);
@@ -121,13 +113,8 @@ public class IdeaSubmissionScreen extends ScrollPane {
         formContent.setPadding(new Insets(40, 50, 40, 50));
         formContent.setMaxWidth(700);
 
-        // Title section
         VBox titleSection = createTitleSection();
-        
-        // Description section
         VBox descriptionSection = createDescriptionSection();
-        
-        // Category section
         VBox categorySection = createCategorySection();
 
         formContent.getChildren().addAll(titleSection, descriptionSection, categorySection);
@@ -161,7 +148,6 @@ public class IdeaSubmissionScreen extends ScrollPane {
         titleField.setPrefHeight(45);
         applyEnhancedInputStyles(titleField);
 
-        // Character counter
         titleField.textProperty().addListener((obs, oldText, newText) -> {
             if (newText.length() > 100) {
                 titleField.setText(oldText);
@@ -205,7 +191,6 @@ public class IdeaSubmissionScreen extends ScrollPane {
         descriptionArea.setMaxWidth(Double.MAX_VALUE);
         applyEnhancedInputStyles(descriptionArea);
 
-        // Character counter
         descriptionArea.textProperty().addListener((obs, oldText, newText) -> {
             if (newText.length() > 500) {
                 descriptionArea.setText(oldText);
@@ -307,7 +292,6 @@ public class IdeaSubmissionScreen extends ScrollPane {
                 return;
             }
 
-            // Clean category (remove emoji)
             String category = selectedCategory.replaceAll("^[^\\p{L}\\d\\s]+\\s*", "");
 
             IdeaService.submitIdea(currentParticipant, title, description, category);
@@ -330,9 +314,9 @@ public class IdeaSubmissionScreen extends ScrollPane {
         if (percentage < 0.7) {
             color = Theme.TEXT_SECONDARY;
         } else if (percentage < 0.9) {
-            color = "#FFA500"; // Orange
+            color = "#FFA500";
         } else {
-            color = "#FF6B6B"; // Red
+            color = "#FF6B6B";
         }
         
         counter.setStyle("-fx-font-size: 12px; -fx-text-fill: " + color + "; -fx-font-weight: bold;");

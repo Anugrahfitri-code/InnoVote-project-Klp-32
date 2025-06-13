@@ -38,16 +38,11 @@ public class IdeaDetailScreen extends VBox {
 
         VBox mainContent = new VBox(20);
         mainContent.setPadding(new Insets(20));
-
-        // Enhanced idea information card
         VBox ideaCard = createIdeaInfoCard();
-
-        // Enhanced votes section
         VBox votesSection = createVotesSection();
 
         // Action buttons section
         HBox actionButtons = createActionButtons();
-
         mainContent.getChildren().addAll(ideaCard, votesSection, actionButtons);
         scrollPane.setContent(mainContent);
 
@@ -85,7 +80,6 @@ public class IdeaDetailScreen extends VBox {
                         "-fx-border-width: 1;" +
                         "-fx-padding: 25;" +
                         "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 2);");
-
         // Card header
         HBox cardHeader = new HBox();
         cardHeader.setAlignment(Pos.CENTER_LEFT);
@@ -97,9 +91,7 @@ public class IdeaDetailScreen extends VBox {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        // --- PERBAIKI BAGIAN INI: Avg Score label di Idea Info Card ---
         Label scoreLabel = new Label(String.format("⭐ %.1f", idea.getAverageScore()));
-        // ***************************************************************
         scoreLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; " +
                             "-fx-text-fill: " + Theme.ACCENT_PRIMARY + ";" +
                             "-fx-background-color: " + Theme.BACKGROUND_TERTIARY + ";" +
@@ -108,17 +100,14 @@ public class IdeaDetailScreen extends VBox {
 
         cardHeader.getChildren().addAll(cardTitle, spacer, scoreLabel);
 
-        // Separator line
         Separator separator1 = new Separator();
         separator1.setStyle("-fx-background-color: " + Theme.BORDER_COLOR + ";");
 
-        // Information grid
         GridPane infoGrid = new GridPane();
         infoGrid.setHgap(20);
         infoGrid.setVgap(12);
         infoGrid.setAlignment(Pos.TOP_LEFT);
 
-        // Add information rows to grid
         addInfoToGrid(infoGrid, 0, "📝 Title:", idea.getTitle(), true);
         addInfoToGrid(infoGrid, 1, "📄 Description:", idea.getDescription(), false);
         addInfoToGrid(infoGrid, 2, "🏷 Category:", idea.getCategory(), false);
@@ -167,13 +156,11 @@ public class IdeaDetailScreen extends VBox {
                         "-fx-padding: 25;" +
                         "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 2);");
 
-        // Votes header with statistics
         HBox votesHeader = createVotesHeader();
 
         Separator separator2 = new Separator();
         separator2.setStyle("-fx-background-color: " + Theme.BORDER_COLOR + ";");
 
-        // Enhanced table for votes
         TableView<Vote> voteTable = createEnhancedVoteTable();
 
         votesSection.getChildren().addAll(votesHeader, separator2, voteTable);
@@ -217,7 +204,6 @@ public class IdeaDetailScreen extends VBox {
                         "-fx-border-radius: 10;" +
                         "-fx-border-width: 1;");
 
-        // Enhanced table columns
         TableColumn<Vote, String> voterCol = new TableColumn<>("👤 Voter");
         voterCol.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getVoter().getUsername()));
         voterCol.setPrefWidth(150);
@@ -228,7 +214,6 @@ public class IdeaDetailScreen extends VBox {
         scoreCol.setPrefWidth(100);
         scoreCol.setStyle("-fx-alignment: CENTER;");
 
-        // --- PERBAIKI BAGIAN INI: Custom cell factory untuk kolom skor di tabel ---
         scoreCol.setCellFactory(column -> new TableCell<Vote, Number>() {
             @Override
             protected void updateItem(Number item, boolean empty) {
@@ -239,17 +224,16 @@ public class IdeaDetailScreen extends VBox {
                 } else {
                     setText(String.format("%.1f", item.doubleValue())); // Format to one decimal place
                     double score = item.doubleValue();
-                    if (score >= 4) { // Assuming 0-4 score range
+                    if (score >= 4) { 
                         setStyle("-fx-text-fill: #4CAF50; -fx-font-weight: bold;"); // Green for high scores
-                    } else if (score >= 2) { // Middle range
+                    } else if (score >= 2) { 
                         setStyle("-fx-text-fill: " + Theme.ACCENT_PRIMARY + "; -fx-font-weight: bold;"); // Blue for medium scores
-                    } else { // Low scores
+                    } else { 
                         setStyle("-fx-text-fill: #FF9800; -fx-font-weight: bold;"); // Orange for low scores
                     }
                 }
             }
         });
-        // **************************************************************************
 
         TableColumn<Vote, String> commentCol = new TableColumn<>("💬 Comment");
         commentCol.setCellValueFactory(cellData -> cellData.getValue().commentProperty());
@@ -314,8 +298,6 @@ public class IdeaDetailScreen extends VBox {
         return label;
     }
 
-    // Helper method to adjust brightness (assuming this exists in Theme.java or a utility class)
-    // If not, you need to add it here, or ensure Theme.java has it.
     private String adjustBrightness(String color, double factor) {
         try {
             Color c = Color.web(color);

@@ -66,8 +66,8 @@ public class ParticipantDashboard extends BorderPane {
         VBox headerContainer = new VBox(10);
         headerContainer.setPadding(new Insets(25, 30, 15, 30));
         headerContainer.setStyle("-fx-background-color: linear-gradient(to bottom, " +
-                                 Theme.BACKGROUND_PRIMARY + ", " +
-                                 adjustBrightness(Theme.BACKGROUND_PRIMARY, -0.02) + ");");
+                                Theme.BACKGROUND_PRIMARY + ", " +
+                                adjustBrightness(Theme.BACKGROUND_PRIMARY, -0.02) + ");");
 
         HBox topRow = new HBox(15);
         topRow.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
@@ -127,10 +127,10 @@ public class ParticipantDashboard extends BorderPane {
         ideaTable.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
 
         String tableHeaderStyle = "-fx-background-color: " + adjustBrightness(Theme.BACKGROUND_SECONDARY, -0.1) + ";" +
-                                  "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";" +
-                                  "-fx-font-weight: bold;" +
-                                  "-fx-font-size: 13px;" +
-                                  "-fx-alignment: CENTER_LEFT; ";
+                                "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-font-size: 13px;" +
+                                "-fx-alignment: CENTER_LEFT; ";
 
         ideaTable.lookupAll(".column-header").forEach(node -> node.setStyle(tableHeaderStyle));
         Node filler = ideaTable.lookup(".filler");
@@ -171,7 +171,7 @@ public class ParticipantDashboard extends BorderPane {
                     setStyle("-fx-background-color: " + Theme.BACKGROUND_TERTIARY + "; -fx-border-color: " + Theme.BORDER_COLOR + ";");
                 } else {
                     if (item.doubleValue() >= 0) {
-                         setText(String.format("%.1f", item.doubleValue()));
+                        setText(String.format("%.1f", item.doubleValue()));
                     } else {
                         setText("N/A");
                     }
@@ -427,7 +427,7 @@ public class ParticipantDashboard extends BorderPane {
         Node cancelButton = dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
 
         if (saveButton instanceof Button) {
-             styleDialogButton((Button) saveButton, "primary");
+            styleDialogButton((Button) saveButton, "primary");
         }
         if (cancelButton instanceof Button) {
             styleDialogButton((Button) cancelButton, "negative");

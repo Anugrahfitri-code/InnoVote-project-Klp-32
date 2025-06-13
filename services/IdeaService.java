@@ -61,8 +61,7 @@ public class IdeaService {
                                 .filter(idea -> idea.getId().equals(ideaId))
                                 .findFirst()
                                 .orElseThrow(() -> new IdeaException("Idea with ID " + ideaId + " not found."));
-
-        // Cek duplikasi judul baru untuk partisipan yang sama, kecuali ide itu sendiri
+                                
         boolean isDuplicateTitleForOtherIdea = DummyDatabase.getAllIdeas().stream()
                 .filter(idea -> idea.getParticipant().equals(ideaToEdit.getParticipant()))
                 .filter(idea -> !idea.getId().equals(ideaId)) 
