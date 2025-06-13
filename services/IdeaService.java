@@ -1,9 +1,9 @@
 package services;
 
-import com.innovote.models.Idea;
-import com.innovote.models.Participant;
-import com.innovote.utils.DummyDatabase;
-import com.innovote.exceptions.IdeaException;
+import models.Idea;
+import models.Participant;
+import utils.DummyDatabase;
+import exceptions.IdeaException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

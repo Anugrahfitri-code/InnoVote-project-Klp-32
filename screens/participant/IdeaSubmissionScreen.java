@@ -20,12 +20,12 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
-import com.innovote.models.Participant;
-import com.innovote.services.IdeaService;
-import com.innovote.utils.AlertHelper;
-import com.innovote.exceptions.IdeaException;
-import com.innovote.utils.SceneManager;
-import com.innovote.utils.Theme;
+import models.Participant;
+import services.IdeaService;
+import utils.AlertHelper;
+import exceptions.IdeaException;
+import utils.SceneManager;
+import utils.Theme;
 
 public class IdeaSubmissionScreen extends ScrollPane {
 

@@ -2,15 +2,15 @@ package screens.participant;
 
 import java.util.Optional;
 
-import com.innovote.exceptions.IdeaException;
-import com.innovote.models.Idea;
-import com.innovote.models.Participant;
-import com.innovote.screens.common.IdeaDetailScreen;
-import com.innovote.services.IdeaService;
-import com.innovote.session.Session;
-import com.innovote.utils.AlertHelper;
-import com.innovote.utils.SceneManager;
-import com.innovote.utils.Theme;
+import exceptions.IdeaException;
+import models.Idea;
+import models.Participant;
+import screens.common.IdeaDetailScreen;
+import services.IdeaService;
+import session.Session;
+import utils.AlertHelper;
+import utils.SceneManager;
+import utils.Theme;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
