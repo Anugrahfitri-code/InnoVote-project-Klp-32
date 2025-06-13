@@ -1,13 +1,12 @@
-package com.innovote.models;
+package models;
 
 public abstract class EventUser {
-    protected String username; // Lebih jelas daripada displayName
+    protected String username; 
 
     public EventUser(String username) {
         this.username = username;
     }
-
-    // Common method untuk semua user
+    
     public String getWelcomeMessage() {
         return "Welcome, " + username + "!";
     }

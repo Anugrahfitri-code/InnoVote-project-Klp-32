@@ -1,4 +1,4 @@
-package com.innovote.exceptions;
+package exceptions;
 
 public class IdeaException extends Exception {
     public IdeaException(String message) {
