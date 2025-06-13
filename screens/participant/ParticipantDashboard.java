@@ -35,7 +35,6 @@ public class ParticipantDashboard extends BorderPane {
         VBox headerVBox = createHeaderSection();
  
         StackPane ideaListSection = createIdeaListSection();
-\
         HBox actionButtonSection = createActionButtonSection();
 
         setTop(headerVBox);
