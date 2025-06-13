@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.effect.DropShadow;
 import models.Idea;
 import models.Vote;
-import User;
+import models.User;
 import utils.DummyDatabase;
 import utils.SceneManager;
 import utils.Theme;
