@@ -1,4 +1,4 @@
-package com.innovote.screens.auth;
+package screens.auth;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.*;

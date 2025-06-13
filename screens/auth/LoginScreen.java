@@ -1,4 +1,4 @@
-package com.innovote.screens.auth;
+package screens.auth;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -336,7 +336,8 @@ public class LoginScreen extends VBox {
             }
         });
 
-        registerBtn.setOnAction(e -> SceneManager.switchToRegister());
+        registerBtn.setO
+        nAction(e -> SceneManager.switchToRegister());
 
         // Enable Enter key for login
         usernameField.setOnAction(e -> passwordField.requestFocus());
