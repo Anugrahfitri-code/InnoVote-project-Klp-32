@@ -1,17 +1,17 @@
-package com.innovote.services;
+package services;
 
 import java.util.Optional;
 import java.util.UUID; 
 
-import com.innovote.exceptions.VotingException;
-import com.innovote.models.Idea;
-import com.innovote.models.Judge;
-import com.innovote.models.Vote;
-import com.innovote.utils.DummyDatabase;
+import exceptions.VotingException;
+import models.Idea;
+import models.Judge;
+import models.Vote;
+import utils.DummyDatabase;
 
 public class VotingService {
-    private static final int MIN_SCORE = 1;
-    private static final int MAX_SCORE = 4;
+    private static final double MIN_SCORE = 1;
+    private static final double MAX_SCORE = 4;
 
     public static Vote submitVote(Judge judge, Idea idea, double score, String comment) throws VotingException {
         validateVote(judge, idea, score);
@@ -44,7 +44,6 @@ public class VotingService {
     }
 
     public static long getVoteCount(Idea idea) {
-
         return DummyDatabase.getVotes().stream()
                 .filter(v -> v.getIdea().equals(idea))
                 .count();
