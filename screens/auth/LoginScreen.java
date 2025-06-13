@@ -336,8 +336,7 @@ public class LoginScreen extends VBox {
             }
         });
 
-        registerBtn.setO
-        nAction(e -> SceneManager.switchToRegister());
+        registerBtn.setOnAction(e -> SceneManager.switchToRegister());
 
         // Enable Enter key for login
         usernameField.setOnAction(e -> passwordField.requestFocus());
