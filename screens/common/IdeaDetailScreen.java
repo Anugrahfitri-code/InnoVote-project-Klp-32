@@ -1,4 +1,4 @@
-package com.innovote.screens.common;
+package screens.common;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.*;

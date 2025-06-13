@@ -1,4 +1,4 @@
-package com.innovote.models;
+package models;
 
 public abstract class EventUser {
     protected String username; 

@@ -1,4 +1,4 @@
-package com.innovote.screens.participant;
+package screens.participant;
 
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;

@@ -1,4 +1,4 @@
-package com.innovote.services;
+package services;
 
 import com.innovote.models.Idea;
 import com.innovote.models.Participant;
