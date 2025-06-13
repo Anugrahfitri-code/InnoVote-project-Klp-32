@@ -1,18 +1,18 @@
-package com.innovote.screens.judge;
+package screens.judge;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.innovote.exceptions.IdeaException;
-import com.innovote.models.Idea;
-import com.innovote.models.Judge;
-import com.innovote.screens.common.IdeaDetailScreen;
-import com.innovote.services.IdeaService;
-import com.innovote.session.Session;
-import com.innovote.utils.AlertHelper;
-import com.innovote.utils.SceneManager;
-import com.innovote.utils.Theme;
+import exceptions.IdeaException;
+import models.Idea;
+import models.Judge;
+import screens.common.IdeaDetailScreen;
+import services.IdeaService;
+import session.Session;
+import utils.AlertHelper;
+import utils.SceneManager;
+import utils.Theme;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
