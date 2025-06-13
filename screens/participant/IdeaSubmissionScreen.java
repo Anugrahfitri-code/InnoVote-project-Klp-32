@@ -135,7 +135,7 @@ public class IdeaSubmissionScreen extends ScrollPane {
 
         return cardContainer;
     }
-    
+
     private VBox createTitleSection() {
         VBox titleSection = new VBox(8);
         titleSection.setAlignment(Pos.CENTER_LEFT);
@@ -437,3 +437,53 @@ public class IdeaSubmissionScreen extends ScrollPane {
             }
         });
     }
+
+    private void applyComboBoxStyles(ComboBox<String> comboBox) {
+        String baseStyle = 
+            "-fx-background-color: " + Theme.BACKGROUND_SECONDARY + "; " +
+            "-fx-text-fill: " + Theme.TEXT_PRIMARY + "; " +
+            "-fx-border-color: " + adjustBrightness(Theme.BORDER_COLOR, 0.3) + "; " +
+            "-fx-border-width: 2; " +
+            "-fx-background-radius: 10; " +
+            "-fx-border-radius: 10; " +
+            "-fx-padding: 8; " +
+            "-fx-prompt-text-fill: " + Theme.TEXT_SECONDARY + "; " +
+            "-fx-font-size: 14px;";
+
+        comboBox.setStyle(baseStyle);
+
+        comboBox.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (isNowFocused) {
+                comboBox.setStyle(
+                    "-fx-background-color: " + Theme.BACKGROUND_SECONDARY + "; " +
+                    "-fx-text-fill: " + Theme.TEXT_PRIMARY + "; " +
+                    "-fx-border-color: " + Theme.ACCENT_PRIMARY + "; " +
+                    "-fx-border-width: 2; " +
+                    "-fx-background-radius: 10; " +
+                    "-fx-border-radius: 10; " +
+                    "-fx-padding: 8; " +
+                    "-fx-prompt-text-fill: " + Theme.TEXT_SECONDARY + "; " +
+                    "-fx-font-size: 14px; " +
+                    "-fx-effect: dropshadow(gaussian, " + Theme.ACCENT_PRIMARY + ", 6, 0, 0, 0);"
+                );
+            } else {
+                comboBox.setStyle(baseStyle);
+            }
+        });
+    }
+
+    private String adjustBrightness(String color, double factor) {
+        try {
+            Color c = Color.web(color);
+            double red = Math.max(0, Math.min(1, c.getRed() + factor));
+            double green = Math.max(0, Math.min(1, c.getGreen() + factor));
+            double blue = Math.max(0, Math.min(1, c.getBlue() + factor));
+            return String.format("#%02X%02X%02X", 
+                (int)(red * 255), 
+                (int)(green * 255), 
+                (int)(blue * 255));
+        } catch (Exception e) {
+            return color;
+        }
+    }
+}
