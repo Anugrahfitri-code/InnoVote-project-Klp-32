@@ -22,7 +22,6 @@ Kompetisi Ide Inovasi Mahasiswa 2025
 ### 🏠 Scene 2 – Halaman Utama
 - **Peserta**
   - Mendaftarkan ide inovasi
-  - Melihat ide-ide dari peserta lain
 
 - **Juri**
   - Melihat semua ide peserta
@@ -33,7 +32,6 @@ Kompetisi Ide Inovasi Mahasiswa 2025
 ## 🌟 Fitur Tambahan
 - Daftar komunitas inovator berdasarkan topik (AI, Lingkungan, Kesehatan, dll.)
 - Statistik jumlah vote per ide
-- Deadline waktu voting
 
 ---
 
