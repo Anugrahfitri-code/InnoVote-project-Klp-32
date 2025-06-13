@@ -1,12 +1,12 @@
-package com.innovote.screens.judge;
+package screens.judge;
 
-import com.innovote.exceptions.VotingException;
-import com.innovote.models.Idea;
-import com.innovote.models.Judge;
-import com.innovote.services.VotingService;
-import com.innovote.utils.AlertHelper;
-import com.innovote.utils.SceneManager;
-import com.innovote.utils.Theme;
+import exceptions.VotingException;
+import models.Idea;
+import models.Judge;
+import services.VotingService;
+import utils.AlertHelper;
+import utils.SceneManager;
+import utils.Theme;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
