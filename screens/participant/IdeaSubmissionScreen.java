@@ -135,3 +135,305 @@ public class IdeaSubmissionScreen extends ScrollPane {
 
         return cardContainer;
     }
+    
+    private VBox createTitleSection() {
+        VBox titleSection = new VBox(8);
+        titleSection.setAlignment(Pos.CENTER_LEFT);
+
+        HBox titleHeader = new HBox(8);
+        titleHeader.setAlignment(Pos.CENTER_LEFT);
+
+        Label titleLabel = new Label("✏ Idea Title");
+        titleLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: " + Theme.TEXT_PRIMARY + "; " +
+                        "-fx-font-weight: bold;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        titleCountLabel = new Label("0/100");
+        titleCountLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
+
+        titleHeader.getChildren().addAll(titleLabel, spacer, titleCountLabel);
+
+        titleField = new TextField();
+        titleField.setPromptText("Enter your innovative idea title...");
+        titleField.setMaxWidth(Double.MAX_VALUE);
+        titleField.setPrefHeight(45);
+        applyEnhancedInputStyles(titleField);
+
+        // Character counter
+        titleField.textProperty().addListener((obs, oldText, newText) -> {
+            if (newText.length() > 100) {
+                titleField.setText(oldText);
+            } else {
+                titleCountLabel.setText(newText.length() + "/100");
+                updateCounterStyle(titleCountLabel, newText.length(), 100);
+            }
+        });
+
+        Label titleHint = new Label("💡 Make it catchy and descriptive!");
+        titleHint.setStyle("-fx-font-size: 11px; -fx-text-fill: " + Theme.TEXT_SECONDARY + "; " +
+                        "-fx-font-style: italic;");
+
+        titleSection.getChildren().addAll(titleHeader, titleField, titleHint);
+        return titleSection;
+    }
+
+    private VBox createDescriptionSection() {
+        VBox descriptionSection = new VBox(8);
+        descriptionSection.setAlignment(Pos.CENTER_LEFT);
+
+        HBox descHeader = new HBox(8);
+        descHeader.setAlignment(Pos.CENTER_LEFT);
+
+        Label descLabel = new Label("📝 Detailed Description");
+        descLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: " + Theme.TEXT_PRIMARY + "; " +
+                        "-fx-font-weight: bold;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        descriptionCountLabel = new Label("0/500");
+        descriptionCountLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
+
+        descHeader.getChildren().addAll(descLabel, spacer, descriptionCountLabel);
+
+        descriptionArea = new TextArea();
+        descriptionArea.setPromptText("Describe your idea in detail. What problem does it solve? How does it work? Why is it innovative?");
+        descriptionArea.setWrapText(true);
+        descriptionArea.setPrefRowCount(6);
+        descriptionArea.setMaxWidth(Double.MAX_VALUE);
+        applyEnhancedInputStyles(descriptionArea);
+
+        // Character counter
+        descriptionArea.textProperty().addListener((obs, oldText, newText) -> {
+            if (newText.length() > 500) {
+                descriptionArea.setText(oldText);
+            } else {
+                descriptionCountLabel.setText(newText.length() + "/500");
+                updateCounterStyle(descriptionCountLabel, newText.length(), 500);
+            }
+        });
+
+        Label descHint = new Label("🎯 Be specific about the problem you're solving and your solution approach");
+        descHint.setStyle("-fx-font-size: 11px; -fx-text-fill: " + Theme.TEXT_SECONDARY + "; " +
+                        "-fx-font-style: italic;");
+
+        descriptionSection.getChildren().addAll(descHeader, descriptionArea, descHint);
+        return descriptionSection;
+    }
+
+    private VBox createCategorySection() {
+        VBox categorySection = new VBox(8);
+        categorySection.setAlignment(Pos.CENTER_LEFT);
+
+        Label categoryLabel = new Label("🏷 Category");
+        categoryLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: " + Theme.TEXT_PRIMARY + "; " +
+                            "-fx-font-weight: bold;");
+
+        categoryComboBox = new ComboBox<>();
+        categoryComboBox.getItems().addAll(
+            "🌍 Environment & Sustainability",
+            "🤖 Artificial Intelligence",
+            "📚 Education & Learning",
+            "🏥 Healthcare & Medicine",
+            "💼 Business & Finance",
+            "🎨 Arts & Creative",
+            "🔬 Science & Research",
+            "🏠 Smart Home & IoT",
+            "🚗 Transportation",
+            "🍕 Food & Agriculture",
+            "🎮 Gaming & Entertainment",
+            "📱 Mobile Technology",
+            "🔒 Security & Privacy",
+            "Other"
+        );
+        categoryComboBox.setPromptText("Select the best category for your idea");
+        categoryComboBox.setMaxWidth(Double.MAX_VALUE);
+        categoryComboBox.setPrefHeight(45);
+        applyComboBoxStyles(categoryComboBox);
+
+        Label categoryHint = new Label("📂 Choose the category that best fits your innovation");
+        categoryHint.setStyle("-fx-font-size: 11px; -fx-text-fill: " + Theme.TEXT_SECONDARY + "; " +
+                            "-fx-font-style: italic;");
+
+        categorySection.getChildren().addAll(categoryLabel, categoryComboBox, categoryHint);
+        return categorySection;
+    }
+
+    private HBox createButtonSection() {
+        HBox buttonSection = new HBox(20);
+        buttonSection.setAlignment(Pos.CENTER);
+        buttonSection.setPadding(new Insets(20, 0, 0, 0));
+
+        Button backButton = new Button("← Back to Dashboard");
+        applySecondaryButtonStyle(backButton);
+        backButton.setPrefWidth(200);
+        backButton.setOnAction(e -> {
+            SceneManager.switchToScreen(new ParticipantDashboard(currentParticipant));
+        });
+
+        Button submitButton = new Button("🚀 Submit Innovation");
+        applyPrimaryButtonStyle(submitButton);
+        submitButton.setPrefWidth(200);
+        submitButton.setOnAction(e -> handleSubmission());
+
+        buttonSection.getChildren().addAll(backButton, submitButton);
+        return buttonSection;
+    }
+
+    private void handleSubmission() {
+        try {
+            String title = titleField.getText().trim();
+            String description = descriptionArea.getText().trim();
+            String selectedCategory = categoryComboBox.getValue();
+            
+            // Validation
+            if (title.isEmpty()) {
+                AlertHelper.showAlert(AlertType.WARNING, "Validation Error", "Please enter an idea title.");
+                titleField.requestFocus();
+                return;
+            }
+            
+            if (description.isEmpty()) {
+                AlertHelper.showAlert(AlertType.WARNING, "Validation Error", "Please provide a detailed description.");
+                descriptionArea.requestFocus();
+                return;
+            }
+            
+            if (selectedCategory == null) {
+                AlertHelper.showAlert(AlertType.WARNING, "Validation Error", "Please select a category for your idea.");
+                categoryComboBox.requestFocus();
+                return;
+            }
+
+            // Clean category (remove emoji)
+            String category = selectedCategory.replaceAll("^[^\\p{L}\\d\\s]+\\s*", "");
+
+            IdeaService.submitIdea(currentParticipant, title, description, category);
+            
+            AlertHelper.showAlert(AlertType.INFORMATION, "🎉 Success!", 
+                "Your innovative idea '" + title + "' has been submitted successfully!\n\n" +
+                "It will now be reviewed by our expert judges. Good luck!");
+
+            SceneManager.switchToScreen(new ParticipantDashboard(currentParticipant));
+
+        } catch (IdeaException ex) {
+            AlertHelper.showAlert(AlertType.ERROR, "Submission Error", ex.getMessage());
+        }
+    }
+
+    private void updateCounterStyle(Label counter, int current, int max) {
+        double percentage = (double) current / max;
+        String color;
+        
+        if (percentage < 0.7) {
+            color = Theme.TEXT_SECONDARY;
+        } else if (percentage < 0.9) {
+            color = "#FFA500"; // Orange
+        } else {
+            color = "#FF6B6B"; // Red
+        }
+        
+        counter.setStyle("-fx-font-size: 12px; -fx-text-fill: " + color + "; -fx-font-weight: bold;");
+    }
+
+    private void applyPrimaryButtonStyle(Button button) {
+        String baseStyle = String.format(
+            "-fx-background-color: linear-gradient(to bottom, %s, %s); " +
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-font-size: 16px; " +
+            "-fx-background-radius: 10; " +
+            "-fx-padding: 15 30; " +
+            "-fx-cursor: hand; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 0, 3);",
+            Theme.ACCENT_PRIMARY, adjustBrightness(Theme.ACCENT_PRIMARY, -0.1)
+        );
+
+        String hoverStyle = String.format(
+            "-fx-background-color: linear-gradient(to bottom, %s, %s); " +
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-font-size: 16px; " +
+            "-fx-background-radius: 10; " +
+            "-fx-padding: 15 30; " +
+            "-fx-cursor: hand; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 4); " +
+            "-fx-scale-y: 1.05; -fx-scale-x: 1.05;",
+            Theme.ACCENT_PRIMARY_HOVER, adjustBrightness(Theme.ACCENT_PRIMARY_HOVER, -0.1)
+        );
+
+        button.setStyle(baseStyle);
+        button.setOnMouseEntered(e -> button.setStyle(hoverStyle));
+        button.setOnMouseExited(e -> button.setStyle(baseStyle));
+    }
+
+    private void applySecondaryButtonStyle(Button button) {
+        String baseStyle = String.format(
+            "-fx-background-color: transparent; " +
+            "-fx-text-fill: %s; " +
+            "-fx-font-weight: bold; " +
+            "-fx-font-size: 16px; " +
+            "-fx-border-color: %s; " +
+            "-fx-border-width: 2; " +
+            "-fx-border-radius: 10; " +
+            "-fx-background-radius: 10; " +
+            "-fx-padding: 15 30; " +
+            "-fx-cursor: hand;",
+            Theme.TEXT_SECONDARY, Theme.TEXT_SECONDARY
+        );
+
+        String hoverStyle = String.format(
+            "-fx-background-color: %s; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-font-size: 16px; " +
+            "-fx-border-color: %s; " +
+            "-fx-border-width: 2; " +
+            "-fx-border-radius: 10; " +
+            "-fx-background-radius: 10; " +
+            "-fx-padding: 15 30; " +
+            "-fx-cursor: hand;",
+            Theme.TEXT_SECONDARY, Theme.TEXT_SECONDARY
+        );
+
+        button.setStyle(baseStyle);
+        button.setOnMouseEntered(e -> button.setStyle(hoverStyle));
+        button.setOnMouseExited(e -> button.setStyle(baseStyle));
+    }
+
+    private void applyEnhancedInputStyles(Node node) {
+        String baseStyle = 
+            "-fx-background-color: " + Theme.BACKGROUND_SECONDARY + "; " +
+            "-fx-text-fill: " + Theme.TEXT_PRIMARY + "; " +
+            "-fx-border-color: " + adjustBrightness(Theme.BORDER_COLOR, 0.3) + "; " +
+            "-fx-border-width: 2; " +
+            "-fx-background-radius: 10; " +
+            "-fx-border-radius: 10; " +
+            "-fx-padding: 12; " +
+            "-fx-prompt-text-fill: " + Theme.TEXT_SECONDARY + "; " +
+            "-fx-font-size: 14px; " +
+            "-fx-effect: innershadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);";
+
+        node.setStyle(baseStyle);
+
+        node.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (isNowFocused) {
+                node.setStyle(
+                    "-fx-background-color: " + Theme.BACKGROUND_SECONDARY + "; " +
+                    "-fx-text-fill: " + Theme.TEXT_PRIMARY + "; " +
+                    "-fx-border-color: " + Theme.ACCENT_PRIMARY + "; " +
+                    "-fx-border-width: 2; " +
+                    "-fx-background-radius: 10; " +
+                    "-fx-border-radius: 10; " +
+                    "-fx-padding: 12; " +
+                    "-fx-prompt-text-fill: " + Theme.TEXT_SECONDARY + "; " +
+                    "-fx-font-size: 14px; " +
+                    "-fx-effect: dropshadow(gaussian, " + Theme.ACCENT_PRIMARY + ", 6, 0, 0, 0);"
+                );
+            } else {
+                node.setStyle(baseStyle);
+            }
+        });
+    }
