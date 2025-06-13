@@ -1,7 +1,7 @@
-package com.innovote.app;
+package app;
 
-import com.innovote.screens.auth.LoginScreen;
-import com.innovote.utils.SceneManager;
+import screens.auth.LoginScreen;
+import utils.SceneManager;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
