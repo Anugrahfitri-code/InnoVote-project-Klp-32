@@ -1,4 +1,4 @@
-package com.innovote.exceptions;
+package exceptions;
 
 public class VotingException extends Exception {
     public VotingException(String message) {

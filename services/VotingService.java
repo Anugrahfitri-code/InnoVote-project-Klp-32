@@ -1,17 +1,19 @@
-package com.innovote.services;
+package services;
 
-import com.innovote.models.*;
-import com.innovote.utils.DummyDatabase;
-import com.innovote.exceptions.VotingException;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID; 
 
-public class VotingService {
-    private static final int MIN_SCORE = 1;
-    private static final int MAX_SCORE = 10;
+import exceptions.VotingException;
+import models.Idea;
+import models.Judge;
+import models.Vote;
+import utils.DummyDatabase;
 
-    public static Vote submitVote(Judge judge, Idea idea, int score, String comment) throws VotingException {
+public class VotingService {
+    private static final double MIN_SCORE = 1;
+    private static final double MAX_SCORE = 4;
+
+    public static Vote submitVote(Judge judge, Idea idea, double score, String comment) throws VotingException {
         validateVote(judge, idea, score);
 
         Optional<Vote> existingVote = DummyDatabase.getVotes().stream()
@@ -31,7 +33,7 @@ public class VotingService {
         return newVote;
     }
 
-    private static void validateVote(Judge judge, Idea idea, int score) throws VotingException {
+    private static void validateVote(Judge judge, Idea idea, double score) throws VotingException {
         if (judge == null || idea == null) {
             throw new VotingException("Invalid judge or idea.");
         }
@@ -42,7 +44,6 @@ public class VotingService {
     }
 
     public static long getVoteCount(Idea idea) {
-
         return DummyDatabase.getVotes().stream()
                 .filter(v -> v.getIdea().equals(idea))
                 .count();

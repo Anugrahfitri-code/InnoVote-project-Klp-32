@@ -1,9 +1,15 @@
-package com.innovote.utils;
+package utils;
 
-import com.innovote.models.*;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.time.LocalDateTime; 
+import java.util.ArrayList; 
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors; 
+
+import models.Idea;
+import models.Judge;
+import models.Participant;
+import models.User;
+import models.Vote;
 
 public class DummyDatabase {
     private static final List<User> users = new ArrayList<>();
@@ -105,7 +111,7 @@ public class DummyDatabase {
         if (votes.stream().noneMatch(v -> v.getId().equals(vote.getId()))) {
             votes.add(vote);
             vote.getIdea().addVote(vote); 
-            System.out.println("Vote added: by " + vote.getVoter().getUsername() + " for " + vote.getIdea().getTitle() + " (Score: " + vote.getScore() + ")"); 
+            System.out.println("Vote added: by " + vote.getVoter().getUsername() + " for " + vote.getIdea().getTitle() + " (Score: " + vote.getScore() + ")"); // Debugging
         } else {
             System.out.println("Vote with ID " + vote.getId() + " already exists. Not adding duplicate.");
         }
