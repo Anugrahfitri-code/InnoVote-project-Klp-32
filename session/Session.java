@@ -20,4 +20,5 @@ public class Session {
     public static boolean isLoggedIn() {
         return currentUser != null;
     }
+    
 }

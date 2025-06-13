@@ -47,4 +47,5 @@ public abstract class User {
     public int hashCode() {
         return Objects.hash(id);  
     }
+    
 }

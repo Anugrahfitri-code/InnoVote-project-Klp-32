@@ -19,4 +19,5 @@ public class Participant extends User {
     public List<Idea> getSubmittedIdeas() {
         return new ArrayList<>(submittedIdeas);
     }
+    
 }

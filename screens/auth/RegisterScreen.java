@@ -13,11 +13,9 @@ import exceptions.AuthException;
 
 public class RegisterScreen extends VBox {
     public RegisterScreen() {
-        // === WINDOW CONFIGURATION ===
         this.setPrefWidth(600);
         this.setPrefHeight(580);
-        
-        // === MAIN BACKGROUND WITH GRADIENT ===
+    
         this.setStyle(
             "-fx-background-color: linear-gradient(to bottom right, " + 
             Theme.BACKGROUND_PRIMARY + ", " + 
@@ -27,7 +25,6 @@ public class RegisterScreen extends VBox {
         this.setSpacing(30);
         this.setPadding(new Insets(40));
 
-        // === HEADER SECTION ===
         VBox headerBox = new VBox(10);
         headerBox.setAlignment(Pos.CENTER);
         
@@ -47,14 +44,12 @@ public class RegisterScreen extends VBox {
         
         headerBox.getChildren().addAll(titleLabel, subtitleLabel);
 
-        // === MAIN FORM CARD ===
         VBox formCard = new VBox(25);
         formCard.setAlignment(Pos.CENTER);
         formCard.setPadding(new Insets(40, 35, 40, 35));
         formCard.setMaxWidth(450);
         formCard.setPrefWidth(450);
         
-        // Enhanced card styling with shadow effect
         formCard.setStyle(
             "-fx-background-color: " + Theme.BACKGROUND_SECONDARY + ";" +
             "-fx-background-radius: 15px;" +
@@ -64,11 +59,9 @@ public class RegisterScreen extends VBox {
             "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 5);"
         );
 
-        // === INPUT FIELDS SECTION ===
         VBox inputSection = new VBox(20);
         inputSection.setAlignment(Pos.CENTER);
         
-        // Username Field Container
         VBox usernameContainer = new VBox(8);
         usernameContainer.setAlignment(Pos.CENTER_LEFT);
         
@@ -96,8 +89,7 @@ public class RegisterScreen extends VBox {
             "-fx-focus-color: " + Theme.ACCENT_PRIMARY + ";" +
             "-fx-faint-focus-color: transparent;"
         );
-        
-        // Focus effects for username field
+       
         usernameField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 usernameField.setStyle(usernameField.getStyle() + 
@@ -116,7 +108,6 @@ public class RegisterScreen extends VBox {
         
         usernameContainer.getChildren().addAll(usernameLabel, usernameField);
 
-        // Password Field Container
         VBox passwordContainer = new VBox(8);
         passwordContainer.setAlignment(Pos.CENTER_LEFT);
         
@@ -144,8 +135,7 @@ public class RegisterScreen extends VBox {
             "-fx-focus-color: " + Theme.ACCENT_PRIMARY + ";" +
             "-fx-faint-focus-color: transparent;"
         );
-        
-        // Focus effects for password field
+       
         passwordField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 passwordField.setStyle(passwordField.getStyle() + 
@@ -164,7 +154,6 @@ public class RegisterScreen extends VBox {
         
         passwordContainer.getChildren().addAll(passwordLabel, passwordField);
 
-        // Role Selection Container
         VBox roleContainer = new VBox(8);
         roleContainer.setAlignment(Pos.CENTER_LEFT);
         
@@ -180,7 +169,7 @@ public class RegisterScreen extends VBox {
         roleCombo.setPromptText("Select your role");
         roleCombo.setPrefWidth(380);
         roleCombo.setPrefHeight(45);
-        roleCombo.getSelectionModel().selectFirst(); // Default to "Participant"
+        roleCombo.getSelectionModel().selectFirst(); 
         roleCombo.setStyle(
             "-fx-background-color: " + Theme.BACKGROUND_PRIMARY + ";" +
             "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";" +
@@ -194,7 +183,6 @@ public class RegisterScreen extends VBox {
             "-fx-faint-focus-color: transparent;"
         );
         
-        // Focus effects for combo box
         roleCombo.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 roleCombo.setStyle(roleCombo.getStyle() + 
@@ -215,7 +203,6 @@ public class RegisterScreen extends VBox {
         
         inputSection.getChildren().addAll(usernameContainer, passwordContainer, roleContainer);
 
-        // === ERROR LABEL ===
         Label errorLabel = new Label();
         errorLabel.setStyle(
             "-fx-text-fill: #e74c3c;" + 
@@ -224,11 +211,9 @@ public class RegisterScreen extends VBox {
         );
         errorLabel.setVisible(false);
 
-        // === BUTTONS SECTION ===
         VBox buttonSection = new VBox(15);
         buttonSection.setAlignment(Pos.CENTER);
         
-        // Register Button
         Button registerBtn = new Button("Create Account");
         registerBtn.setPrefWidth(380);
         registerBtn.setPrefHeight(48);
@@ -244,7 +229,6 @@ public class RegisterScreen extends VBox {
             "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 2);"
         );
         
-        // Enhanced hover effects for register button
         registerBtn.setOnMouseEntered(e -> {
             registerBtn.setStyle(
                 "-fx-background-color: linear-gradient(to right, " + 
@@ -275,7 +259,6 @@ public class RegisterScreen extends VBox {
             );
         });
 
-        // Divider with "or" text
         HBox dividerBox = new HBox(15);
         dividerBox.setAlignment(Pos.CENTER);
         
@@ -295,7 +278,6 @@ public class RegisterScreen extends VBox {
         
         dividerBox.getChildren().addAll(leftLine, orLabel, rightLine);
 
-        // Back to Login Button
         Button backToLoginBtn = new Button("Already have an account? Sign In");
         backToLoginBtn.setPrefWidth(380);
         backToLoginBtn.setPrefHeight(48);
@@ -311,7 +293,6 @@ public class RegisterScreen extends VBox {
             "-fx-cursor: hand;"
         );
         
-        // Hover effects for back to login button
         backToLoginBtn.setOnMouseEntered(e -> {
             backToLoginBtn.setStyle(
                 "-fx-background-color: " + Theme.ACCENT_PRIMARY + ";" +
@@ -343,7 +324,6 @@ public class RegisterScreen extends VBox {
         
         buttonSection.getChildren().addAll(registerBtn, dividerBox, backToLoginBtn);
 
-        // === ROLE DESCRIPTION ===
         VBox roleDescriptionBox = new VBox(8);
         roleDescriptionBox.setAlignment(Pos.CENTER);
         roleDescriptionBox.setPadding(new Insets(15, 0, 0, 0));
@@ -369,17 +349,14 @@ public class RegisterScreen extends VBox {
         
         roleDescriptionBox.getChildren().addAll(roleDescTitle, participantDesc, judgeDesc);
 
-        // === ASSEMBLE FORM CARD ===
         formCard.getChildren().addAll(inputSection, errorLabel, buttonSection, roleDescriptionBox);
 
-        // === EVENT HANDLERS ===
         registerBtn.setOnAction(e -> {
             errorLabel.setVisible(false);
             String username = usernameField.getText().trim();
             String password = passwordField.getText();
             String selectedRole = roleCombo.getValue();
             
-            // Enhanced validation
             if (username.isEmpty() || password.isEmpty() || selectedRole == null) {
                 errorLabel.setText("Please fill in all fields");
                 errorLabel.setVisible(true);
@@ -409,7 +386,7 @@ public class RegisterScreen extends VBox {
                     "Welcome to InnoVote!", 
                     "Account successfully created for " + newUser.getUsername() + " as " + selectedRole
                 );
-                SceneManager.switchToAuth(); // Return to login after successful registration
+                SceneManager.switchToAuth(); 
             } catch (AuthException ex) {
                 errorLabel.setText(ex.getMessage());
                 errorLabel.setVisible(true);
@@ -427,12 +404,11 @@ public class RegisterScreen extends VBox {
 
         backToLoginBtn.setOnAction(e -> SceneManager.switchToAuth());
 
-        // Enable keyboard navigation
         usernameField.setOnAction(e -> passwordField.requestFocus());
         passwordField.setOnAction(e -> roleCombo.requestFocus());
         roleCombo.setOnAction(e -> registerBtn.fire());
 
-        // === ASSEMBLE MAIN LAYOUT ===
         this.getChildren().addAll(headerBox, formCard);
     }
+    
 }

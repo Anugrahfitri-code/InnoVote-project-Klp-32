@@ -14,13 +14,9 @@ public class Judge extends User {
 
     public void vote(Idea idea, int score, String comment) {
         String voteId = UUID.randomUUID().toString();
-
         Vote newVote = new Vote(voteId, idea, this, score, comment);
-
         this.votes.add(newVote);
-
         utils.DummyDatabase.addVote(newVote);
-
         System.out.println("Judge " + this.getUsername() + " voted for idea: " + idea.getTitle() + " with score: " + score);
     }
 

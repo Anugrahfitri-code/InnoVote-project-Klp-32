@@ -16,11 +16,9 @@ import javafx.scene.paint.Color;
 
 public class LoginScreen extends VBox {
     public LoginScreen() {
-        // === WINDOW CONFIGURATION ===
         this.setPrefWidth(600);
         this.setPrefHeight(500);
         
-        // === MAIN BACKGROUND WITH GRADIENT ===
         this.setStyle(
             "-fx-background-color: linear-gradient(to bottom right, " + 
             Theme.BACKGROUND_PRIMARY + ", " + 
@@ -30,7 +28,6 @@ public class LoginScreen extends VBox {
         this.setSpacing(30);
         this.setPadding(new Insets(40));
 
-        // === HEADER SECTION ===
         VBox headerBox = new VBox(10);
         headerBox.setAlignment(Pos.CENTER);
         
@@ -50,7 +47,6 @@ public class LoginScreen extends VBox {
         
         headerBox.getChildren().addAll(titleLabel, subtitleLabel);
 
-        // === MAIN FORM CARD ===
         VBox formCard = new VBox(25);
         formCard.setAlignment(Pos.CENTER);
         formCard.setPadding(new Insets(40, 35, 40, 35));
@@ -66,11 +62,9 @@ public class LoginScreen extends VBox {
             "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 5);"
         );
 
-        // === INPUT FIELDS SECTION ===
         VBox inputSection = new VBox(20);
         inputSection.setAlignment(Pos.CENTER);
         
-        // Username Field Container
         VBox usernameContainer = new VBox(8);
         usernameContainer.setAlignment(Pos.CENTER_LEFT);
         
@@ -99,7 +93,6 @@ public class LoginScreen extends VBox {
             "-fx-faint-focus-color: transparent;"
         );
         
-        // Focus effects for username field
         usernameField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 usernameField.setStyle(usernameField.getStyle() + 
@@ -118,7 +111,6 @@ public class LoginScreen extends VBox {
         
         usernameContainer.getChildren().addAll(usernameLabel, usernameField);
 
-        // Password Field Container
         VBox passwordContainer = new VBox(8);
         passwordContainer.setAlignment(Pos.CENTER_LEFT);
         
@@ -147,7 +139,6 @@ public class LoginScreen extends VBox {
             "-fx-faint-focus-color: transparent;"
         );
         
-        // Focus effects for password field
         passwordField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 passwordField.setStyle(passwordField.getStyle() + 
@@ -168,7 +159,6 @@ public class LoginScreen extends VBox {
         
         inputSection.getChildren().addAll(usernameContainer, passwordContainer);
 
-        // === ERROR LABEL ===
         Label errorLabel = new Label();
         errorLabel.setStyle(
             "-fx-text-fill: #e74c3c;" + 
@@ -177,11 +167,9 @@ public class LoginScreen extends VBox {
         );
         errorLabel.setVisible(false);
 
-        // === BUTTONS SECTION ===
         VBox buttonSection = new VBox(15);
         buttonSection.setAlignment(Pos.CENTER);
-        
-        // Login Button
+      
         Button loginBtn = new Button("Sign In");
         loginBtn.setPrefWidth(350);
         loginBtn.setPrefHeight(48);
@@ -197,7 +185,6 @@ public class LoginScreen extends VBox {
             "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 2);"
         );
         
-        // Enhanced hover effects for login button
         loginBtn.setOnMouseEntered(e -> {
             loginBtn.setStyle(
                 "-fx-background-color: linear-gradient(to right, " + 
@@ -228,7 +215,6 @@ public class LoginScreen extends VBox {
             );
         });
 
-        // Divider with "or" text
         HBox dividerBox = new HBox(15);
         dividerBox.setAlignment(Pos.CENTER);
         
@@ -248,7 +234,6 @@ public class LoginScreen extends VBox {
         
         dividerBox.getChildren().addAll(leftLine, orLabel, rightLine);
 
-        // Register Button
         Button registerBtn = new Button("Create New Account");
         registerBtn.setPrefWidth(350);
         registerBtn.setPrefHeight(48);
@@ -264,7 +249,6 @@ public class LoginScreen extends VBox {
             "-fx-cursor: hand;"
         );
         
-        // Hover effects for register button
         registerBtn.setOnMouseEntered(e -> {
             registerBtn.setStyle(
                 "-fx-background-color: " + Theme.ACCENT_PRIMARY + ";" +
@@ -296,16 +280,13 @@ public class LoginScreen extends VBox {
         
         buttonSection.getChildren().addAll(loginBtn, dividerBox, registerBtn);
 
-        // === ASSEMBLE FORM CARD ===
         formCard.getChildren().addAll(inputSection, errorLabel, buttonSection);
 
-        // === EVENT HANDLERS ===
         loginBtn.setOnAction(e -> {
             errorLabel.setVisible(false);
             String username = usernameField.getText().trim();
             String password = passwordField.getText();
             
-            // Basic validation
             if (username.isEmpty() || password.isEmpty()) {
                 errorLabel.setText("Please fill in all fields");
                 errorLabel.setVisible(true);
@@ -338,11 +319,9 @@ public class LoginScreen extends VBox {
 
         registerBtn.setOnAction(e -> SceneManager.switchToRegister());
 
-        // Enable Enter key for login
         usernameField.setOnAction(e -> passwordField.requestFocus());
         passwordField.setOnAction(e -> loginBtn.fire());
 
-        // === ASSEMBLE MAIN LAYOUT ===
         this.getChildren().addAll(headerBox, formCard);
     }
 }

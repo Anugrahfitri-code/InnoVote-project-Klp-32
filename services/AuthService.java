@@ -58,4 +58,5 @@ public class AuthService {
             throw new AuthException("Username already exists");
         }
     }
+    
 }
